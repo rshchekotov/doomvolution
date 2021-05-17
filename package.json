@@ -1,0 +1,37 @@
+{
+  "name": "doomvolution",
+  "version": "1.0.0",
+  "description": "Universal Discord Bot",
+  "main": "app.js",
+  "scripts": {
+    "start:dev": "ts-node-dev -r tsconfig-paths/register --no-notify src/app.ts",
+    "start:db": "docker-compose up -d",
+    "stop:db": "docker-compose stop"
+  },
+  "keywords": [
+    "discord.js"
+  ],
+  "author": "Doomie",
+  "license": "MIT",
+  "devDependencies": {
+    "@types/mongoose": "^5.10.5",
+    "@types/node": "^15.0.2",
+    "@types/node-cron": "^2.0.3",
+    "@types/node-fetch": "^2.5.10",
+    "ts-node": "^9.1.1",
+    "ts-node-dev": "^1.1.6",
+    "tsconfig-paths": "^3.9.0",
+    "typescript": "^4.2.4"
+  },
+  "dependencies": {
+    "@typegoose/typegoose": "^7.6.0",
+    "dayjs": "^1.10.4",
+    "discord.js": "^12.5.3",
+    "dotenv": "^9.0.2",
+    "mongoose": "5.10.18",
+    "node-cache": "^5.1.2",
+    "node-cron": "^3.0.0",
+    "node-fetch": "^2.6.1",
+    "puppeteer": "^9.1.1"
+  }
+}
