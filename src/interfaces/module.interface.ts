@@ -23,7 +23,7 @@ export abstract class Module {
 
         let roles = hasARole(data.author.id, config, this.permissions);
         if(roles.length > 0) {
-            send(data.channel_id, '❌ Error: Insufficient Permissions! Missing: ' + roles.join(', '));
+            //send(data.channel_id, '❌ Error: Insufficient Permissions! Missing: ' + roles.join(', '));
             return null;
         }
 

@@ -95,6 +95,7 @@ export class FactModule extends Module {
         this.counter++;
         let confirm = event === this.types[1];
         let print = false, interact = false;
+        
         if(!confirm) {
             print = this.counter % config.data.fact_frequency === 0;
             interact = await this.cmd(data, this.re, config) != null;
