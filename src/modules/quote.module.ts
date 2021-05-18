@@ -32,11 +32,11 @@ async function formatQuote(quote: Quote, config: GuildConfig, footer?: string) {
         // Query API
         let anime = await aniSearch(quote.show!);
         // Quote Show
-        embed.setTitle(`${quote.author} (from ${ anime?.title.english || anime?.title.native || quote.show })`);
-        let img = quote.image || anime?.coverImage.large;
+        embed.setTitle(`${quote.author} (from ${ anime!.title.english || anime!.title.native || quote.show })`);
+        let img = quote.image || anime!.coverImage.large;
         if(img) embed.setImage(img);
         // Url
-        let url = quote.link || anime?.siteUrl;
+        let url = quote.link || anime!.siteUrl;
         if(url) embed.setURL(url);
         // Quote
         embed.setDescription(quote.quote);
@@ -107,8 +107,8 @@ export class QuoteModule extends Module {
 
             // Get Embed
             let embed = msg.embeds[0];
-            let match = /q-([a-f\d]{6}).*/.exec(embed.footer?.text || '');
-            if(embed.footer?.text && match) {
+            let match = /q-([a-f\d]{6}).*/.exec(embed.footer!.text || '');
+            if(embed.footer!.text && match) {
                 let qid = match[1];
 
                 if(conf.includes(eid)) {
@@ -153,8 +153,8 @@ export class QuoteModule extends Module {
                 this.cache[qid] = <Quote> body;
                 (await getMessage(data.channel_id, data.id)).delete();
                 let msg = (await send(data.channel_id, (await formatQuote(this.cache[qid]!, config, `q-${qid} | confirm`))!));
-                await msg?.react(conf[0]);
-                await msg?.react(dism[0]);
+                await msg!.react(conf[0]);
+                await msg!.react(dism[0]);
             }
         } else if(display.includes(keyword)) {
             if(config.data.quotes && config.data.quotes.length > 0) {

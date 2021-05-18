@@ -67,7 +67,7 @@ export class ManualModule extends Module {
 
             // Get Embed
             let embed = msg.embeds[0];
-            if(!embed.title?.startsWith('Man') && !embed.title?.startsWith('WoMan')) { return; }; // Skip if not Man Entry
+            if(!embed.title || (!embed.title!.startsWith('Man') && !embed.title!.startsWith('WoMan'))) { return; }; // Skip if not Man Entry
 
             let page: RegExpExecArray | null = null;
 
@@ -78,7 +78,7 @@ export class ManualModule extends Module {
                 if(!page) { return; }; // Skip if One-Page Entry / Not Found
             }
 
-            let mod = modules[/(?:Wo)?Man \| (\w+)/.exec(embed.title)![1]];
+            let mod = modules[/(?:Wo)?Man \| (\w+)/.exec(embed.title!)![1]];
             let p = parseInt(page![1]) - 1;
             let m = parseInt(page![2]);
             let pn = 0;

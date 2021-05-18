@@ -1,4 +1,5 @@
 import { guilds } from "@/app";
+import { Logger } from '@/services/logger.service';
 import { GuildEventHandler } from "@/events/guild.handler";
 import { GuildConfig } from "@/interfaces/guild-config.interface";
 import { Module } from "@/interfaces/module.interface";
@@ -28,9 +29,10 @@ export class StarredModule extends Module {
 
     run = async (event: string, data: any, config: GuildConfig) => {
         let users = new Set<string>();
-        let msg = await getMessage(data.channel_id, data.message_id);
+	let msg = await getMessage(data.channel_id, data.message_id);
+	Logger.debug('Reaction Accepted for ' + msg.id);
         msg.reactions.cache.forEach(react => {
-            if(stars.includes(react.emoji.name) || react.emoji.name.includes('star')) {
+            if(stars.includes(react.emoji.name) || react.emoji.name.toLowerCase().includes('star')) {
                 react.users.cache.array().map(user => user.username).forEach(name => {
                     users.add(name);
                 });
@@ -43,15 +45,36 @@ export class StarredModule extends Module {
             if(!pins || !pins.map(pin => pin.source).includes(data.message_id)) {
                 pins = pins || [];
 
-                let isEmbed = (msg.embeds && msg.embeds.length > 0);
+		let isEmbed = (msg.embeds && msg.embeds.length > 0);
+		let hasMedia = () => {
+		    if(msg.content) {
+		        let img = /https?:\/\/.+\.(?:png|gif|jpe?g|mp4)/.exec(msg.content);
+			Logger.debug(`Image Detected? ${img}`);
+			if(img) return img[0];
+			else return undefined;
+		    } else if(isEmbed) {
+		 	if(msg.embeds[0].image) {
+			    return msg.embeds[0].image.url;
+			} else {
+			    return undefined;
+			}
+		    }
+		};
                 let embed = new MessageEmbed()
                     .setTitle(`Precious Message${isEmbed ? ` (${msg.embeds[0].title})` : ''}`)
                     .setDescription(isEmbed ? msg.embeds[0].description : msg.content)
                     .setURL(`https://discord.com/channels/${msg.guild!.id}/${msg.channel.id}/${msg.id}`)
                     .addField('Starred By:', Array.from(users).join(', '), false)
                     .addField('Message From:', new Date(msg.editedTimestamp || msg.createdTimestamp).toLocaleString())
-                    .setTimestamp();
-                if(!isEmbed) embed.setFooter(`Quote by: ${msg.member?.nickname || msg.author.username}`, 
+		    .setTimestamp();
+
+		let media = hasMedia();    
+		if(media) {
+		    embed.setTitle('Precious Media');
+		    embed.setDescription('');
+		    embed.setImage(media);
+		}
+                if(!isEmbed) embed.setFooter(`Quote by: ${(msg.member && msg.member.nickname) ? msg.member.nickname : msg.author.username}`, 
                     'https://media1.tenor.com/images/e7e211a3c1a5b8e18a1801c3bc84c46a/tenor.gif')
                 let pin = await send(config.data.star_channel, embed);
 

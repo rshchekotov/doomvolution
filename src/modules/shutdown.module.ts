@@ -42,7 +42,7 @@ export class ShutdownModule extends Module {
         let match = await this.cmd(data, this.re, config);
         if(match![1]) {
             Logger.warn('Restarting!');
-            await send(data.channel_id, `${(await getMember(config.gid, client.user!.id)).nickname || client.user?.username} ${choose(bye)}`);
+            await send(data.channel_id, `${(await getMember(config.gid, client.user!.id)).nickname || client.user!.username} ${choose(bye)}`);
             setTimeout(() => {
                 process.on('exit', () => {
                     cp.spawn('./launch.sh', [], {
@@ -55,7 +55,7 @@ export class ShutdownModule extends Module {
             }, 5000);
         } else {
             Logger.warn('Shutting Down!');
-            await send(data.channel_id, `${(await getMember(config.gid, client.user!.id)).nickname || client.user?.username} ${choose(bye)}`);
+            await send(data.channel_id, `${(await getMember(config.gid, client.user!.id)).nickname || client.user!.username} ${choose(bye)}`);
             client.destroy();
             process.exit(0);
         }

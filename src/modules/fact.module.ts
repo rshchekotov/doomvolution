@@ -117,8 +117,8 @@ export class FactModule extends Module {
 
             // Get Embed
             let embed = msg.embeds[0];
-            let match = /f-([a-f\d]{6}).*/.exec(embed.footer?.text || '');
-            if(embed.footer?.text && match) {
+            let match = /f-([a-f\d]{6}).*/.exec(embed.footer!.text || '');
+            if(embed.footer!.text && match) {
                 let fid = match[1];
 
                 if(conf.includes(eid)) {
@@ -168,8 +168,8 @@ export class FactModule extends Module {
                     this.cache[fid] = <Fact> body;
                     (await getMessage(data.channel_id, data.id)).delete();
                     let msg = (await send(data.channel_id, printFact(this.cache[fid]!, `f-${fid} | confirm`)));
-                    await msg?.react(conf[0]);
-                    await msg?.react(dism[0]);
+                    await msg!.react(conf[0]);
+                    await msg!.react(dism[0]);
                 } else {
                     Logger.debug(JSON.stringify(body));
                     send(data.channel_id, 'Missing one of required Properties: [fact, color, chance, rarity]');

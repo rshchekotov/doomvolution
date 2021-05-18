@@ -216,8 +216,8 @@ export class ModManModule extends Module {
                     await msg.edit(embed);
                     
                     let reaction = await getReaction(eid, msg.id, msg.channel.id);
-                    await reaction?.remove(data.user_id);
-                    Logger.warn('[ModMan] Removing User Reaction');
+                    await reaction!.remove(data.user_id);
+                    Logger.debug('[ModMan] Removing User Reaction');
                     await checkReactions(msg.channel.id, msg.id, ['❌'].concat(number.slice(0, search.pages.length)));
                 } else if(eid === '❌') {
                     this.cache[msg.id] = undefined;

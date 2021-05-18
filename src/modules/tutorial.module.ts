@@ -136,7 +136,7 @@ export class TutorialModule extends Module {
             let eid = data.emoji.id || data.emoji.name;
 
             let embed = msg.embeds[0];
-            if(embed.title === 'Bot Introduction' && embed.footer?.text) {
+            if(embed.title === 'Bot Introduction' && embed.footer && embed.footer.text) {
                 let username = embed.footer.text.split(' | ')[0];
                 if(user.username !== username) return;
 
@@ -148,7 +148,7 @@ export class TutorialModule extends Module {
                     this.cache[user.id] = (this.cache[user.id]+1) % pages.length;
                     embed.setDescription(pages[this.cache[user.id]]);
                     await msg.edit(embed);
-                    await react?.remove(user.id);
+                    await react!.remove(user.id);
                     Logger.debug('[Tutorial] Removing User Reaction');
                 } else if(eid === '❌') {
                     this.cache[user.id] = 0;
@@ -157,7 +157,7 @@ export class TutorialModule extends Module {
                     this.cache[user.id] = (pages.length+this.cache[user.id]-1) % pages.length;
                     embed.setDescription(pages[this.cache[user.id]]);
                     await msg.edit(embed);
-                    await react?.remove(user.id);
+                    await react!.remove(user.id);
                     Logger.warn('[Tutorial] Removing User Reaction');
                 }
 

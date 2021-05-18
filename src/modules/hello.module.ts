@@ -55,7 +55,7 @@ export class HelloModule extends Module {
             let embed = new MessageEmbed()
                 .setTitle(choose(greetings))
                 .setImage(choose(images)!)
-                .setFooter(`from ${initial.member?.nickname || initial.author.username}`)
+                .setFooter(`from ${initial.member!.nickname || initial.author.username}`)
                 .setTimestamp();
             
             // Empty Message Bug

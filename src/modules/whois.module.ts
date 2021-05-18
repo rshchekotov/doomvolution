@@ -42,7 +42,7 @@ export class WhoIsModule extends Module {
                     { name: 'Status', value: user.presence.status }
                 ])
                 .setURL(`https://discord.com/channels/@me/${user.id}`)
-                .setFooter(`requested by ${initial.member?.nickname || initial.author.username}`)
+                .setFooter(`requested by ${initial.member!.nickname || initial.author.username}`)
                 .setTimestamp();
             
             // Empty Message Bug

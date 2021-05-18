@@ -52,11 +52,12 @@ async function start() {
         }
     });
 
-    await client.login(process.env.dev_token);
+    await client.login(process.env.build_token);
 
     // Setup Image
     try {
-        await client.user?.setAvatar('https://c.wallhere.com/photos/c3/d3/simple_background_bandage_Darling_in_the_FranXX_feet_horns_Zero_Two_Darling_in_the_FranXX-1332201.jpg!d');
+    	if(!client.user) return;
+        await client.user.setAvatar('https://c.wallhere.com/photos/c3/d3/simple_background_bandage_Darling_in_the_FranXX_feet_horns_Zero_Two_Darling_in_the_FranXX-1332201.jpg!d');
     } catch {
         Logger.warn('Profile Picture unchanged!');
     }

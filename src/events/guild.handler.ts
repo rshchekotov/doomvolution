@@ -40,7 +40,7 @@ export class GuildEventHandler {
         registered.push(guild.id);
 
         let g = client.guilds.cache.filter((_, key: string) => key === guild.id).first();
-        await g?.me?.edit({ nick: this.config.nick });
+        await g!.me!.edit({ nick: this.config.nick });
         guilds.set(this.config.gid, this);
 
         this.handleEvent('BOT_READY', guild);

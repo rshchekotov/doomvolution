@@ -42,7 +42,7 @@ export async function getMember(gid: string, uid: string): Promise<GuildMember> 
 }
 
 export async function getReaction(rid: string, mid: string, cid: string) {
-    return (await getMessage(cid, mid)).reactions.cache.get(rid)?.users;
+    return (await getMessage(cid, mid)).reactions.cache.get(rid)!.users;
 }
 
 export async function sendAsHook(cid: string, data: WebhookData, content: string | MessageEmbed) {
