@@ -1,22 +1,34 @@
+import { Changelog } from '@/interfaces/changelog.interface';
 import { GuildConfig } from '@/interfaces/guild-config.interface';
 import { Module } from '@/interfaces/module.interface';
 import { send } from '@/util/discord.util';
 import { MessageEmbed } from 'discord.js';
+import fs from 'fs/promises';
 
-const changes =
-  '__***Change Log v1.0.1: Bugs and Fixes vol. 1***__\n' +
-  "-> `[anilookup]` Added 'Not Found' warning to `man`.\n" +
-  '-> `[birthday]` fixed RegEx to allow spaces\n' +
-  '-> `[changelog]` *added*\n' +
-  '-> `[compliment]` changed triggers\n' +
-  "-> `[compliment]` added Promise's `’`\n" +
-  '-> `[emote]` added a lil something to `man` \n' +
-  '-> `[emote]` fixed colon-link bug, should work now.\n' +
-  '-> `[hello]` added welcome message option\n' +
-  '-> `[meep]` fixed RegEx\n' +
-  '-> `[morph]` added `DO NOT OVERUSE`-label \n' +
-  '-> `[sixdigit]` fixed RegEx\n' +
-  '-> `overall` made bot more crash-proof\n';
+async function getVersions() {
+  const rawLogs = await fs.readFile('assets/changelog.json', { encoding: 'utf8' });
+  const json: Changelog[] = JSON.parse(rawLogs);
+  return json.map(e => e.version);
+}
+
+async function getChangelogs(version?: string) {
+  const rawLogs = await fs.readFile('assets/changelog.json', { encoding: 'utf8' });
+  const json: Changelog[] = JSON.parse(rawLogs);
+  const entries: { [version: string]: Changelog } = {};
+  json.forEach(entry => entries[entry.version] = entry);
+
+  let selected: Changelog = json[0];
+  if(version) selected = entries[version] || json[0];
+  return selected;
+}
+
+function formatChangelog(log: Changelog) {
+  return new MessageEmbed()
+    .setTitle(`Changelog v${log.version} | ${log.title}`)
+    .setDescription(log.note + '\n\n' + log.desc.map(upd => `❦ [${upd.module}] ${upd.desc}`).join('\n'))
+    .setFooter(`v${log.version}`)
+    .setThumbnail('https://www.microspot.com/images/upgradesnav.png');
+}
 
 export class ChangelogModule extends Module {
   public name: string = 'changelog';
@@ -28,18 +40,25 @@ export class ChangelogModule extends Module {
     `The ${this.name} module is there to provide ` +
     'you with the information about the most recent ' +
     'changes! You can simply look it up using:' +
-    '```\n$changelog\n```';
+    '```\n$changelog\n```Optionally you can pass along ' +
+    'a version like this:```\n$changelog v1.0.1\n``` and ' +
+    'list all released versions like this:'  +
+    '```\n$changelogs\n```';
 
   verify = async (event: string, data: any, config: GuildConfig) => {
-    return (await this.cmd(data, /^changelog$/, config)) != null;
+    return (await this.cmd(data, /^changelogs?(?: *([\d\.]+))$/, config)) != null;
   };
 
-  run = (event: string, data: any, config: GuildConfig) => {
-    let embed = new MessageEmbed()
-      .setTitle(`Change Log | ${changes.split('\n')[0]}`)
-      .setDescription(changes)
-      .setFooter('v1.0.1')
-      .setThumbnail('https://www.microspot.com/images/upgradesnav.png');
-    send(data.channel_id, embed);
+  run = async (event: string, data: any, config: GuildConfig) => {
+    let resp: string | MessageEmbed | undefined = undefined;
+    let match = (await this.cmd(data, /^changelogs?(?: +v?([\d\.]+))?$/, config))!;
+
+    if(match[0] === 'changelog') {
+      resp = formatChangelog(await getChangelogs(match[1]))
+    } else if(match[0] === 'changelogs') {
+      resp = "Released Versions:\n" + (await getVersions()).join(', ');
+    }
+
+    if(resp) await send(data.channel_id, resp);
   };
 }

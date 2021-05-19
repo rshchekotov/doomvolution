@@ -1,0 +1,36 @@
+[
+    {
+        "version": "1.0.2",
+        "title": "Emote Fix",
+        "note": "Thanks to Bear to pointing me to a bug. Hopefully this fixes it!",
+        "desc": [
+            { "module": "emote", "desc": "fixed RegEx" },
+            { "module": "changelog", "desc": "added searchable changelog history" }
+        ]
+    },
+    {
+        "version": "1.0.1",
+        "title": "Bugs and Fixes",
+        "note": "After the first day of release already a lot of bugs have been found, which makes me equally sad and happy! Sad, because I didn't nail it first try. Happy, because now they're fixed thanks to awesome members ^^!",
+        "desc": [
+            { "module": "anilookup", "desc": "added 'Not Found' warning to `man`" },
+            { "module": "birthday", "desc": "fixed RegEx to allow spaces" },
+            { "module": "changelog", "desc": "*added*" },
+            { "module": "compliment", "desc": "changed triggers" },
+            { "module": "compliment", "desc": "added Promise's `’`" },
+            { "module": "emote", "desc": "added a lil something to `man`" },
+            { "module": "emote", "desc": "fixed colon-link bug, should work now (doesn't)" },
+            { "module": "hello", "desc": "added welcome message option" },
+            { "module": "meep", "desc": "fixed RegEx" },
+            { "module": "morph", "desc": "added `DO NOT OVERUSE` label" },
+            { "module": "sixdigit", "desc": "fixed RegEx" },
+            { "module": "overall", "desc": "made the bot more *crash-proof*." }
+        ]
+    },
+    {
+        "version": "1",
+        "title": "Birth of Lil Doomie",
+        "note": "Lil Doomie has been born. A decent amount of both features and bugs appeared.",
+        "desc": [{ "module": "overall", "desc": "added a ton of initial features!" }]
+    }
+]
