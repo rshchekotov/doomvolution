@@ -1,7 +1,7 @@
 [
     {
         "version": "1.0.2",
-        "title": "Emote Fix",
+        "title": "Emote Fix & Changelogs",
         "note": "Thanks to Bear to pointing me to a bug. Hopefully this fixes it!",
         "desc": [
             { "module": "changelog", "desc": "added searchable changelog history" },

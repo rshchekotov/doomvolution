@@ -17,11 +17,10 @@ function escapeRegExp(str: string) {
 
 function getRegex(config: GuildConfig) {
   let re = new RegExp(
-    `(?:^| *)${escapeRegExp(config.data.emoji_delim[0])}(\\w+)${escapeRegExp(
+    `(?:^| +)${escapeRegExp(config.data.emoji_delim[0])}(\\w+)${escapeRegExp(
       config.data.emoji_delim[1]
-    )}(?: *|$)`
+    )}(?: +|$)`
   );
-  Logger.trace('' + re);
   return re;
 }
 

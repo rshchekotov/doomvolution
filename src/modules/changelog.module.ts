@@ -3,7 +3,7 @@ import { GuildConfig } from '@/interfaces/guild-config.interface';
 import { Module } from '@/interfaces/module.interface';
 import { send } from '@/util/discord.util';
 import { MessageEmbed } from 'discord.js';
-import fs from 'fs/promises';
+import * as fs from 'fs/promises';
 
 async function getVersions() {
   const rawLogs = await fs.readFile('assets/changelog.json', { encoding: 'utf8' });
@@ -45,13 +45,15 @@ export class ChangelogModule extends Module {
     'list all released versions like this:'  +
     '```\n$changelogs\n```';
 
+  re = /^changelogs?(?: +v?([\d\.]+))?$/;
+  
   verify = async (event: string, data: any, config: GuildConfig) => {
-    return (await this.cmd(data, /^changelogs?(?: *([\d\.]+))$/, config)) != null;
+    return (await this.cmd(data, this.re, config)) != null;
   };
 
   run = async (event: string, data: any, config: GuildConfig) => {
     let resp: string | MessageEmbed | undefined = undefined;
-    let match = (await this.cmd(data, /^changelogs?(?: +v?([\d\.]+))?$/, config))!;
+    let match = (await this.cmd(data, this.re, config))!;
 
     if(match[0] === 'changelog') {
       resp = formatChangelog(await getChangelogs(match[1]))
