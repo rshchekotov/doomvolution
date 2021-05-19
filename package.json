@@ -6,7 +6,8 @@
   "scripts": {
     "start:dev": "ts-node-dev -r tsconfig-paths/register --no-notify src/app.ts",
     "start:db": "docker-compose up -d",
-    "stop:db": "docker-compose stop"
+    "stop:db": "docker-compose stop",
+    "prettify": "npx prettier --write src"
   },
   "keywords": [
     "discord.js"
@@ -18,6 +19,12 @@
     "@types/node": "^15.0.2",
     "@types/node-cron": "^2.0.3",
     "@types/node-fetch": "^2.5.10",
+    "@typescript-eslint/eslint-plugin": "^4.24.0",
+    "@typescript-eslint/parser": "^4.24.0",
+    "eslint": "^7.26.0",
+    "eslint-config-prettier": "^8.3.0",
+    "eslint-plugin-prettier": "^3.4.0",
+    "prettier": "^2.3.0",
     "ts-node": "^9.1.1",
     "ts-node-dev": "^1.1.6",
     "tsconfig-paths": "^3.9.0",

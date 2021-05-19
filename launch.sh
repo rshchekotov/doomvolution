@@ -7,4 +7,4 @@ killall node
 sleep 2
 
 # Restart the Bot
-yarn start:dev
+pnpm start:dev
