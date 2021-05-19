@@ -120,7 +120,7 @@ export class FactModule extends Module {
       // Fetch Message
       let msg = await getMessage(data.channel_id, data.message_id);
       if (!msg) return;
-      if (!msg.embeds || msg.embeds.length < 1) {
+      if (!msg.embeds || msg.embeds.length < 1 || !msg.embeds[0].footer) {
         return;
       } // Skip if no Embed
 

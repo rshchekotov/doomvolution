@@ -4,8 +4,9 @@
         "title": "Emote Fix",
         "note": "Thanks to Bear to pointing me to a bug. Hopefully this fixes it!",
         "desc": [
+            { "module": "changelog", "desc": "added searchable changelog history" },
             { "module": "emote", "desc": "fixed RegEx" },
-            { "module": "changelog", "desc": "added searchable changelog history" }
+            { "module": "fact", "desc": "fixed <Internal Error>" }
         ]
     },
     {
