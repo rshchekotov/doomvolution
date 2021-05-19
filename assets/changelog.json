@@ -1,5 +1,15 @@
 [
     {
+        "version": "1.0.3",
+        "title": "Ducky Motes and Plans",
+        "note": "This Update comes with a few fixes and few new things in general :D! Big Plans for the Future <3!",
+        "desc": [
+            { "module": "???", "desc": "ầ ῤƚᾴŋἦөđ ƒӫᾇẗúřȩ" },
+            { "module": "emote", "desc": "another approach to fix the correct replacement" },
+            { "module": "quack", "desc": "🦆 ||(added)||" }
+        ]
+    },
+    {
         "version": "1.0.2",
         "title": "Emote Fix & Changelogs",
         "note": "Thanks to Bear to pointing me to a bug. Hopefully this fixes it!",

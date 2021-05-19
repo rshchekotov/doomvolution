@@ -25,20 +25,24 @@ function getRegex(config: GuildConfig) {
 }
 
 async function parse(local: string, config: GuildConfig) {
+  let changed = false;
+  let nop = local;
   let pattern = getRegex(config);
-  local = local.replace(pattern, (match, p1) => {
-    let emote: string = `${p1}`;
+
+  local = local.replace(pattern, (_match, p1) => {
+    let emote: string = ` ${p1} `;
 
     client.emojis.cache.array().every((emoji) => {
       if (p1 === emoji.name) {
-        emote = `<${emoji.animated ? 'a' : ''}:${emoji.name}:${emoji.id}>`;
-        Logger.debug('' + p1);
+        emote = ` <${emoji.animated ? 'a' : ''}:${emoji.name}:${emoji.id}> `;
+        changed = true;
         return false;
       } else if (
         p1.toLowerCase() === emoji.name.toLowerCase() &&
-        emote === `${p1}`
+        emote === ` ${p1} `
       ) {
-        emote = `<${emoji.animated ? 'a' : ''}:${emoji.name}:${emoji.id}>`;
+        changed = true;
+        emote = ` <${emoji.animated ? 'a' : ''}:${emoji.name}:${emoji.id}> `;
       }
       return true;
     });
@@ -57,7 +61,7 @@ async function parse(local: string, config: GuildConfig) {
     }
     return res;
   }
-  return local;
+  return changed ? local : nop;
 }
 
 export class EmoteModule extends Module {
