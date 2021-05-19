@@ -1,4 +1,5 @@
 import { Changelog } from '@/interfaces/changelog.interface';
+import { Logger } from '@/services/logger.service';
 import { GuildConfig } from '@/interfaces/guild-config.interface';
 import { Module } from '@/interfaces/module.interface';
 import { send } from '@/util/discord.util';
@@ -16,7 +17,6 @@ async function getChangelogs(version?: string) {
   const json: Changelog[] = JSON.parse(rawLogs);
   const entries: { [version: string]: Changelog } = {};
   json.forEach(entry => entries[entry.version] = entry);
-
   let selected: Changelog = json[0];
   if(version) selected = entries[version] || json[0];
   return selected;
@@ -55,10 +55,10 @@ export class ChangelogModule extends Module {
     let resp: string | MessageEmbed | undefined = undefined;
     let match = (await this.cmd(data, this.re, config))!;
 
-    if(match[0] === 'changelog') {
-      resp = formatChangelog(await getChangelogs(match[1]))
-    } else if(match[0] === 'changelogs') {
+    if(match[0] === 'changelogs') {
       resp = "Released Versions:\n" + (await getVersions()).join(', ');
+    } else if(match[0].startsWith('changelog')) {
+      resp = formatChangelog(await getChangelogs(match[1]))
     }
 
     if(resp) await send(data.channel_id, resp);
