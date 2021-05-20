@@ -1,5 +1,13 @@
 [
     {
+        "version": "1.0.5",
+        "title": "Quote Hotfix",
+        "note": "Noticed a little bug in `quote`, which caused the bot to crash upon receiving a reaction, should be fixed now :D",
+        "desc": [
+            { "module": "quote", "desc": "Fixed annoying little bug." }
+        ]
+    },
+    {
         "version": "1.0.4",
         "title": "Stereo Heart",
         "note": "Something's great is coming up and I quote look forward to it's release! I hope it'll be done soon - something I put a lot of effort into. Note: the modules you see in the changelog is not added to the list yet, since it's unfinished and not tested! ||Hopefully it will at least work as soon as I got it ready xD||",
