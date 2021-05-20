@@ -14,13 +14,36 @@ project, but if you wanna contribute, I'd highly suggest
 hitting me up, so I can walk you through the mess I 
 produced!
 
-## To Do
-[ ] Snowiee Visits  
-[ ] Self Destruct  
-[ ] G'night / G'day  
-[ ] Reply Everywhere (message_reference)  
-[ ] Member Pages  
-[ ] Animanga Updates  
+## Self-Host
+You can self-host this project. For that you need to 
+setup a few things. Pre-Requisites are: 
+- [Git](https://git-scm.com/)   
+- [Docker](https://www.docker.com/)  
+- [Docker-Compose](https://github.com/docker/compose/releases)  
+- [Running Docker Daemon / Service](https://docs.docker.com/get-started/)  
+- [Node.JS](https://nodejs.org/en/)  
+- [PNPM](https://pnpm.io/installation)  
+- [FFMPEG](https://ffmpeg.org/download.html)  
+- [Discord Bot Token\[s\]](https://discord.com/developers/applications)  
+- [Spotify API Credentials](https://developer.spotify.com/dashboard/applications)  
+- [Google API Key](https://console.cloud.google.com/)  
+
+Then you need to setup:
+- Git Clone this Repository  
+- Run `pnpm install` in the local repo  
+- Setup Docker Secrets at `./secrets/{db_pass,db_user}`  
+- Setup `.env`-file, with:
+    - build_token: production discord token  
+    - dev_token: dev discord token  
+    - db_port: Port for the DB (same as configured in `docker-compose.yml`)  
+    - db_name: Name for the DB (...)  
+    - db_user: User for the DB (...)  
+    - db_pass: Password for the DB (...)  
+    - spotify_client: Spotify Client ID  
+    - spotify_secret: Spotify Secret Key  
+    - youtube_key: Google (YouTube) API Key  
+
+## Submissions
 *Note: You can message Doomer#3316 or Go#3741 via*
 *Discord for suggestions! [or submit an issue with*
 *the suggestion tag]*

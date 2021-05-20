@@ -5,6 +5,8 @@ import { Module } from '@/interfaces/module.interface';
 import { send } from '@/util/discord.util';
 import { MessageEmbed } from 'discord.js';
 import * as fs from 'fs/promises';
+import { GuildEventHandler } from '@/events/guild.handler';
+import { guilds } from '@/app';
 
 async function getVersions() {
   const rawLogs = await fs.readFile('assets/changelog.json', {
@@ -63,6 +65,14 @@ export class ChangelogModule extends Module {
 
   run = async (event: string, data: any, config: GuildConfig) => {
     if(event === this.types[1]) {
+      let current = (await getVersions())[0];
+      if(current !== config.data.version) {
+        let guild = (<GuildEventHandler> guilds.get(config.gid));
+        guild.config.data.version = current;
+        guild.pushConfig();
+        config = guild.config;
+      }
+
       if(!config.data.channel || !config.data.update) return;
       if(config.data.update === 'true' || config.data.update === true)
         await send(config.data.channel, formatChangelog(await getChangelogs()));
