@@ -18,6 +18,7 @@ import { MorphModule } from './morph.module';
 import { PermissionModule } from './permission.module';
 import { PingModule } from './ping.module';
 import { PrefixModule } from './prefix.module';
+import { QuackModule } from './quack.module';
 import { QuoteModule } from './quote.module';
 import { ReactModule } from './react.module';
 import { ReadyModule } from './ready.module';
@@ -50,6 +51,7 @@ export const modules: { [key: string]: Module } = {
   starred: new StarredModule(),
   embed: new EmbedModule(),
   prefix: new PrefixModule(),
+  quack: new QuackModule(),
   quote: new QuoteModule(),
   emote: new EmoteModule(),
   xkcd: new XKCDModule(),
