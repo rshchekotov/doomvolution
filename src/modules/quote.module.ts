@@ -16,7 +16,9 @@ const create = ['add', 'create', 'insert', 'append'];
 const display = ['display', 'show'];
 
 async function formatQuote(quote: Quote, config: GuildConfig, footer?: string) {
-  let embed: MessageEmbed = new MessageEmbed().setTimestamp();
+  let embed: MessageEmbed = new MessageEmbed()
+    .setColor(randomColor())
+    .setTimestamp();
 
   if (!validate(quote)) return;
 
@@ -82,7 +84,38 @@ export class QuoteModule extends Module {
   man: string[] = [
     '***__Quote Module__***\n' +
       `The ${this.name} module is used to ` +
-      'add quotes.', //TODO: Add Quote Stuff
+      'add quotes. Those quotes are intended to be either memorable ' +
+      'phrases from server members, phrases said by Anime Characters ' +
+      'or famous people.\nIt uses the same syntax for the data as ' +
+      'you can see in `[fact 5]` - JSON or TOML. For completeness ' +
+      'sake I will add the page with a minimal working example, ' +
+      'customized for the quote configuration.',
+    '_**Add Quote**_\n' +
+      'In order to add a quote typing' +
+      '```\n$quote add\n```' +
+      '```toml\ndata="here"\n```' +
+      "should suffice! Of course you'd need to provide valid " +
+      'configuration options!',
+    '_**Configuration Options**_\n' +
+      'There are some options for the data you can provide for a fact. Some of the ' +
+      'options are required, others are optional. The optional ones will be marked ' +
+      'with a `?`.\n' +
+      '`quote` [text]: the quote (max. 256 char.)\n' +
+      '`author` [text]: person, who originally said the quote\n' +
+      '`type` [text]: either "ANIME" or "LIFE" (Caps!)\n' +
+      "`show?` [text]: if 'ANIME' is chosen, is __required__!\n" +
+      '`date?` [text]: the date when the quote was said\n' +
+      '`image?` [text]: proper image-link (with a [png,jpeg,gif] extension)\n' +
+      '`link?` [text]: link that will be activated when you click the title',
+    '_**Examples**_\n' +
+      '1) Life\n```\n$quote add\n``` ```toml\nquote="Go to Sleep!"\nauthor="Tari"\ntype="LIFE"' +
+      '\ndate="Every Day"\nimage="https://gifimage.net/wp-content/uploads/2017/09/anime-sleep-gif-9.gif"' +
+      '\nlink="https://en.wikipedia.org/wiki/Sleep"\n```' +
+      '2) Anime\n```\n$quote add\n``` ```json\n{\n\t"quote": "Human Beings are strong, because We ' +
+      'can change ourselves!",\n\t"author": "Saitama",\n\t"show": "One Punch Man",\n\t"type": "ANIME"\n}\n```',
+    '_**Show Quote**_\n' +
+      'Showing a previously added quote is done using:' +
+      '```\n$quote show\n```Enjoy your added Quotes!',
   ];
 
   cache: { [verification: string]: Quote | undefined } = {};

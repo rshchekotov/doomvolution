@@ -41,6 +41,7 @@
     "node-cron": "^3.0.0",
     "node-fetch": "^2.6.1",
     "puppeteer": "^9.1.1",
-    "sodium": "^3.0.2"
+    "sodium": "^3.0.2",
+    "ytdl-core": "^4.8.0"
   }
 }

@@ -32,17 +32,20 @@ export class QuackModule extends Module {
     '***__Quack Module__***\n' +
     'Quack  quaaack quack, quuack quack quaaackkk.\n' +
     'Quack... Quack? - Quack!\n' +
-    '||if you don\'t understand this - not my fault... ' +
+    "||if you don't understand this - not my fault... " +
     'Guess you gotta learn some duck language... ' +
-    'Here\'s a little help:||\n' +
+    "Here's a little help:||\n" +
     '||https://www.backyardduck.com/duck-language/||';
 
   re: RegExp = /(?:^| *)q+u+a+c+k+(?: *|$)/;
 
   verify = async (_event: string, data: any) => {
     let msg = await getMessage(data.channel_id, data.id);
-    if(!msg) return false;
-    return msg.author.id === DUCKIEEE || this.re.exec(data.content.toLowerCase()) !== null;
+    if (!msg) return false;
+    return (
+      msg.author.id === DUCKIEEE ||
+      this.re.exec(data.content.toLowerCase()) !== null
+    );
   };
 
   run = async (_event: string, data: any, config: GuildConfig) => {
@@ -50,10 +53,13 @@ export class QuackModule extends Module {
     if (!msg) return;
     if (msg.author.bot) return;
 
-    if (msg.author.id === DUCKIEEE && (!config.data.duck || config.data.duck !== 'nope'))
+    if (
+      msg.author.id === DUCKIEEE &&
+      (!config.data.duck || config.data.duck !== 'nope')
+    )
       await msg.react('🦆');
-    
-    if(this.re.exec(msg.content.toLowerCase())) {
+
+    if (this.re.exec(msg.content.toLowerCase())) {
       let md = weightedChoose(markdown);
       await msg.channel.send(`${md}${weightedChoose(text)}${md}`);
     }

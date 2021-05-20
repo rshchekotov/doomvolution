@@ -26,6 +26,7 @@ specifiers:
   ts-node-dev: ^1.1.6
   tsconfig-paths: ^3.9.0
   typescript: ^4.2.4
+  ytdl-core: ^4.8.0
 
 dependencies:
   '@discordjs/opus': 0.5.0
@@ -39,6 +40,7 @@ dependencies:
   node-fetch: 2.6.1
   puppeteer: 9.1.1
   sodium: 3.0.2
+  ytdl-core: 4.8.0
 
 devDependencies:
   '@types/mongoose': 5.10.5
@@ -1409,6 +1411,14 @@ packages:
     dependencies:
       yallist: 4.0.0
 
+  /m3u8stream/0.8.3:
+    resolution: {integrity: sha512-0nAcdrF8YJKUkb6PzWdvGftTPyCVWgoiot1AkNVbPKTeIGsWs6DrOjifrJ0Zi8WQfQmD2SuVCjkYIOip12igng==}
+    engines: {node: '>=10'}
+    dependencies:
+      miniget: 4.2.0
+      sax: 1.2.4
+    dev: false
+
   /make-dir/3.1.0:
     resolution: {integrity: sha512-g3FeP20LNwhALb/6Cz6Dd4F2ngze0jz7tbzrD2wAV+o9FeNHe4rL+yK2md0J/fiSf1sa1ADhXqi5+oVwOM/eGw==}
     engines: {node: '>=8'}
@@ -1468,6 +1478,11 @@ packages:
     engines: {node: '>= 0.6'}
     dependencies:
       mime-db: 1.47.0
+
+  /miniget/4.2.0:
+    resolution: {integrity: sha512-IzTOaNgBw/qEpzkPTE7X2cUVXQfSKbG8w52Emi93zb+Zya2ZFrbmavpixzebuDJD9Ku4ecbaFlC7Y1cEESzQtQ==}
+    engines: {node: '>=10'}
+    dev: false
 
   /minimatch/3.0.4:
     resolution: {integrity: sha512-yJHVQEhyqPLUTgt9B83PXu6W3rx4MvvHvSUvToogpwoGDOUQ+yDrR0HRot+yOCdCO7u4hX3pWft6kWBBcqh0UA==}
@@ -2020,6 +2035,10 @@ packages:
     dev: false
     optional: true
 
+  /sax/1.2.4:
+    resolution: {integrity: sha512-NqVDv9TpANUjFm0N8uM5GxL36UgKi9/atZw+x7YFnQ8ckwFGKrl4xX4yWtrey3UJm5nP1kUbnYgLopqWNSRhWw==}
+    dev: false
+
   /semver/5.7.1:
     resolution: {integrity: sha512-sauaDf/PZdVgrLTNYHRtpXa1iRiKcaebiKQ1BJdpQlWH2lCvexQdX55snPFyK7QzpudqbCI0qXFfOasHdyNDGQ==}
     hasBin: true
@@ -2476,3 +2495,12 @@ packages:
     resolution: {integrity: sha512-Ux4ygGWsu2c7isFWe8Yu1YluJmqVhxqK2cLXNQA5AcC3QfbGNpM7fu0Y8b/z16pXLnFxZYvWhd3fhBY9DLmC6Q==}
     engines: {node: '>=6'}
     dev: true
+
+  /ytdl-core/4.8.0:
+    resolution: {integrity: sha512-LFhhwqFojReoaME17VpsFeiamygM0W/YNG8O02mrmS2O6Em5LjCPiJYdq7Af3CmJtBEOCdptSZ3Ql+3LGWDGvg==}
+    engines: {node: '>=10'}
+    dependencies:
+      m3u8stream: 0.8.3
+      miniget: 4.2.0
+      sax: 1.2.4
+    dev: false

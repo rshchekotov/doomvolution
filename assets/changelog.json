@@ -1,5 +1,17 @@
 [
     {
+        "version": "1.0.4",
+        "title": "Stereo Heart",
+        "note": "Something's great is coming up and I quote look forward to it's release! I hope it'll be done soon - something I put a lot of effort into. Note: the modules you see in the changelog is not added to the list yet, since it's unfinished and not tested! ||Hopefully it will at least work as soon as I got it ready xD||",
+        "desc": [
+            { "module": "changelog", "desc": "add: update-messages" },
+            { "module": "hello", "desc": "edit: man message" },
+            { "module": "quote", "desc": "add: man message" },
+            { "module": "whois", "desc": "fix: *should* work now" },
+            { "module": "deejay", "desc": "add: YouTube and Spotify Query Capabilities" }
+        ]
+    },
+    {
         "version": "1.0.3",
         "title": "Ducky Motes and Plans",
         "note": "This Update comes with a few fixes and few new things in general :D! Big Plans for the Future <3!",

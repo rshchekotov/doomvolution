@@ -40,7 +40,7 @@ export class HelloModule extends Module {
     '' +
     '***__Hello Module__***\n' +
     `The ${this.name} module is one way to welcome your buddies!` +
-    'Send a greeting with: ```$hello```If you want someone ' +
+    'Send a greeting with:```\n$hello\n```If you want someone ' +
     'specific to receive it - feel free to append pings!\n' +
     'Additional functionality includes: if you have the variable ' +
     '`welcome` set properly (to a message) and the variable `channel` ' +
@@ -49,8 +49,8 @@ export class HelloModule extends Module {
     'message using `modman conf`, then please do NOT have new lines ' +
     'and encapsulate the whole message in `"welcome"`. Whenever you need ' +
     'a new line: type `\\n`. Example:\n' +
-    '```\n$modman conf welcome="This\\nmessage\\nhas\\n every\\nword\\n' +
-    'in\\na\\nnew\\nline."\n```The Message will register correctly this ' +
+    '```\n$modman conf welcome="First Paragraph\nSecond Paragraph."\n```' +
+    'The Message will register correctly this ' +
     'way!';
 
   re: RegExp = /^(\w+).*/;

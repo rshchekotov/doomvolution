@@ -24,7 +24,7 @@ export class WhoIsModule extends Module {
     'You can do so, by simply typing: ```$whois ' +
     '@ping```';
 
-  re: RegExp = /^(\w+) <@!(\d+)>*/;
+  re: RegExp = /^(\w+) *<@!(\d+)> */;
 
   verify = async (event: string, data: any, config: GuildConfig) => {
     return (await this.cmd(data, this.re, config)) != null;
@@ -35,7 +35,11 @@ export class WhoIsModule extends Module {
     if (aliases.includes(match![1])) {
       let initial = await getMessage(data.channel_id, data.id);
       if (!initial) return;
-      let user = await getMember(config.gid, match![2]);
+      
+      let mentioned = initial.mentions.members;
+      if(!mentioned) return;
+
+      let user = mentioned.first();
       if (!user) return;
 
       let embed = new MessageEmbed()

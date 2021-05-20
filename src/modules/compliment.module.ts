@@ -35,6 +35,8 @@ const triggers = {
     'screwed',
     'cheesed',
     'annoy',
+    'fuck',
+    'retard'
   ],
 };
 
@@ -73,7 +75,7 @@ export class ComplimentModule extends Module {
     let match: RegExpExecArray | null = null;
 
     if (
-      (match = /^who(?: is|['’]s) (?:a )?(.+)\??/.exec(
+      (match = /^who(?: is|['’’']s) (?:a )?(.+)\??/.exec(
         data.content.toLowerCase()
       )) != null
     ) {
