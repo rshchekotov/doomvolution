@@ -250,7 +250,6 @@ export class ModManModule extends Module {
       // Get Embed
       let embed = msg.embeds[0];
       let search = this.cache[msg.id];
-      Logger.debug('ID: ' + msg.id);
       if (search) {
         if (number.includes(eid)) {
           this.cache[msg.id]!.page = number.indexOf(eid);

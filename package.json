@@ -42,6 +42,7 @@
     "node-fetch": "^2.6.1",
     "puppeteer": "^9.1.1",
     "sodium": "^3.0.2",
-    "ytdl-core": "^4.8.0"
+    "ytdl-core": "^4.8.0",
+    "ytsr": "^3.5.0"
   }
 }

@@ -1,5 +1,16 @@
 [
     {
+        "version": "1.1.0",
+        "title": "Life's only gettin' greater! [Major]",
+        "note": "Life's awesome. I absolutely love it atm, I'm doing well - and as you can tell am having fun with working on new features! I guess it's a daily thing now!\nThis update took a while and adds a cool new feature, which took a lot of work to get working and is yet unpolished, but I'm really lovin' it already and it's only gonna get better!\nThanks for all the support and encouragement! Feedback and Bug Reports are always welcome <3!",
+        "desc": [
+            { "module": "compliment", "desc": "Fixed Reaction Crash Bug" },
+            { "module": "confbrowse", "desc": "*dev tool*: Config Browser" },
+            { "module": "deejay", "desc": "Fixed YT API Issue" },
+            { "module": "deejay", "desc": "Added Commands" }
+        ]
+    },
+    {
         "version": "1.0.5",
         "title": "Quote Hotfix",
         "note": "Noticed a little bug in `quote`, which caused the bot to crash upon receiving a reaction, should be fixed now :D",

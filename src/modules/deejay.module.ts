@@ -1,22 +1,24 @@
 import { GuildConfig } from '@/interfaces/guild-config.interface';
 import { Module } from '@/interfaces/module.interface';
 import * as Cache from 'node-cache';
-import { getMessage } from '@/util/discord.util';
+import { getChannel, getMessage, send } from '@/util/discord.util';
 import {
   authSpotify,
   getSpotifyPlaylist,
   getSpotifyTrack,
 } from '@/util/spotify.util';
 import { SpotifyToken, SpotifyTrack } from '@/interfaces/spotify.interface';
-import { getPlaylist, searchYouTube } from '@/util/youtube.util';
-import { YouTubeSearchList, YouTubeSearchResult, YouTubeVideo } from '@/interfaces/youtube.interface';
-import { Message, StreamDispatcher, VoiceChannel, VoiceConnection } from 'discord.js';
-import ytdl from 'ytdl-core';
+import { searchYouTubeV2 } from '@/util/youtube.util';
+import { YTSRItem } from '@/interfaces/youtube.interface';
+import { Message, MessageEmbed, StreamDispatcher, VoiceConnection } from 'discord.js';
+import * as ytdl from 'ytdl-core';
 import { Logger } from '@/services/logger.service';
 
-const dj = ['dj'];
-const play = ['play'];
+const dj = ['dj', 'deejay'];
+const play = ['play', 'p'];
 const dc = ['dc','disconnect','kill'];
+const queue = ['queue', 'q'];
+const np = ['now', 'n', 'np'];
 
 const media =
   /(\w+) https:\/\/(open\.spotify\.com|(?:w{3}\.)?youtube\.com|youtu\.be)\/(track\/\w+|playlist(?:\/\w+|\?list=[\w\-]+)|watch\?v=\w+(?:&list=[\w\-]+)?|[\w\-]+$)/;
@@ -34,15 +36,30 @@ export class DeeJayModule extends Module {
   public name: string = 'deejay';
   types: string[] = ['MESSAGE_CREATE'];
   requires: string[] = [];
-  man: string =
-    '' +
+  man: string[] = [
     '***__DJ Module__***\n' +
     `The ${this.name} module is made to listen to music ` +
     '- this is an early attempt, so there might be some ' +
     "issues, but eventually I'll make this work at least " +
     'as good as Rythm, including custom features, such as ' +
     'the creation of a playlist from the current queue and ' +
-    'similar!';
+    'similar!',
+    '**_Command Reference_**\n' +
+    'At the moment there are 4 available commands with a ' +
+    'few aliases for convenience sake! All of them are ' +
+    'prefixed with `$dj` and have to be executed whilst ' +
+    'in a voice channel!\nPlease keep in mind that all of ' +
+    'this is heavily work in progress, so it\'s not even ' +
+    'close to being where it\'s gonna be at some point!\n' +
+    '1. **Play**\n' +
+    '```\n$dj play [yt/spotify-url]\n```' +
+    '2. **Queue**\n' +
+    '```\n$dj queue\n```' +
+    '3. **Now Playing**\n' +
+    '```\n$dj now\n```' +
+    '4. **Disconnect**\n' +
+    '```\n$dj disconnect\n```'
+  ];
 
   re: RegExp = /^(\w+) ?(.*)/;
 
@@ -66,6 +83,7 @@ export class DeeJayModule extends Module {
     this.dispatcher = this.play(connection);
 
     this.dispatcher.on('finish', () => {
+      this.queue.shift(); // Remove Played Item
       if(this.queue.length > 1)
         return this.play(connection);
       channel.leave();
@@ -78,8 +96,9 @@ export class DeeJayModule extends Module {
 
   play = (connection: VoiceConnection) => {
     if(this.dispatcher) this.dispatcher.destroy();
+    let link = this.queue[0]!.link;
 
-    return connection.play(ytdl(this.queue[0].link, {
+    return connection.play(ytdl(link, {
       quality: "highestaudio",
       highWaterMark: 1024 * 1024 * 10
     }));
@@ -90,21 +109,27 @@ export class DeeJayModule extends Module {
   };
 
   run = async (event: string, data: any, config: GuildConfig) => {
+    Logger.debug('Verification Passed');
     let match = (await this.cmd(data, this.re, config))!;
 
     if (dj.includes(match[1]) && match[2]) {
-      let message = await getMessage(data.channel_id, data.is);
+      Logger.debug('Command Passed');
+      let message = await getMessage(data.channel_id, data.id);
       if(!message || !message.guild || !message.member) return;
+      Logger.debug('Message from Guild!');
       if(!message.member.voice || !message.member.voice.channel) {
         message.reply('You have to be in a Voice Channel to use this command!');
         return;
       }
 
-      let sub = media.exec(match[2]);
+      let sub = /^(\w+) ?.*/.exec(match[2]);
       if (!sub) return; // If no sub-command
 
       if (play.includes(sub[1])) {
-        let provider = sub[2];
+        let query = media.exec(match[2]);
+        if(!query) return;
+
+        let provider = query[2];
         if (provider.includes('spotify')) {
           let token: SpotifyToken;
           if (!this.cache.has('token')) {
@@ -119,7 +144,7 @@ export class DeeJayModule extends Module {
             token = <SpotifyToken> this.cache.get('token');
           }
 
-          let type = sub[3];
+          let type = query[3];
           if (type.startsWith('track')) {
             // Get Spotify Track
             let track = await getSpotifyTrack(type.split('/')[1], token);
@@ -147,27 +172,13 @@ export class DeeJayModule extends Module {
             }
           }
         } else if (provider.includes('youtu')) {
-          let type = sub[3];
+          let type = query[3];
           let match: null | RegExpExecArray;
 
           // YouTube Playlists
           if ((match = /(?<=(?:&list=))[\w\-]+/.exec(type))) {
             let id = match[0];
-            let list = await getPlaylist(id);
-            if (!list) {
-              Logger.warn('Could not find YouTube Playlist!');
-              return;
-            };
-            list.forEach(item => {
-              let video: YouTubeVideo = item.snippet;
-
-              this.queue.push({
-                title: video.title,
-                artist: video.videoOwnerChannelTitle || video.channelTitle,
-                link: `https://www.youtube.com/watch?v=${video.resourceId!.videoId}`,
-                cover: video.thumbnails.default.url,
-              });
-            });
+            await message.channel.send('YouTube Playlists are currently not supported, but it\'s on the ToDo List though!');
             // YouTube Standard
           } else if ((match = /(?<=(?:watch\?v=))[\w\-]+/.exec(type))) {
             let entry = await YouTube(match[0]);
@@ -182,13 +193,39 @@ export class DeeJayModule extends Module {
         }
 
         // Launch Voice Connection
-        if(!this.dispatcher && this.queue.length > 0) {
+        if(this.queue.length > 0) {
           await this.init(message);
         }
-      }
-    } else if(dc.includes(match[1])) {
-      if(this.dispatcher) {
-        this.dispatcher.destroy();
+      } else if(dc.includes(sub[1])) {
+        let voice = message.member.voice.channel;
+        this.queue = []; // Clear Queue
+        if(this.dispatcher) {
+          try {
+            voice?.leave();
+            this.dispatcher.pause();
+            this.dispatcher.destroy();
+          } catch {
+            Logger.warn('Something went wrong during Voice Disconnect!');
+          }
+        }
+      } else if(queue.includes(sub[1])) {
+        let q = this.queue.map(e => `${e.title} - ${e.artist}`).join('\n');
+
+        await message.channel.send(q);
+      } else if(np.includes(sub[1])) {
+        let embed = new MessageEmbed()
+          .setTitle(`Nothing's playing on the Server!`)
+          .setColor(`#990000`)
+          .setTimestamp();
+        if(this.queue.length < 1) {
+          await message.channel.send(embed);
+          return;
+        }
+        
+        embed.setTitle(`${this.queue[0].title} - ${this.queue[0].artist}`);
+        embed.setImage(this.queue[0].cover || 'https://4.bp.blogspot.com/-FUoPaGKn0FA/Tlys73-VTnI/AAAAAAAABwg/_oVT_8_n7L4/s1600/house_electro_music_wallpaper_5.jpg');
+        embed.setURL(this.queue[0].link);
+        await message.channel.send(embed);    
       }
     }
   };
@@ -196,52 +233,35 @@ export class DeeJayModule extends Module {
 
 async function YouTube(id: string) {
   // Fetch from YouTube!
-  let result:
-  | undefined | null
-  | YouTubeSearchResult
-  | Array<YouTubeSearchResult> = await searchYouTube(id);
-
-  // Get First Hit
-  if (result instanceof Array) result = result.shift();
-
-  // If `error` or no first element.
-  if (!result || result.kind === 'youtube#playlistItem') {
-    Logger.warn('[YT] Error while fetching YouTube Video!');
-    return;
-  };
-
-  let video: YouTubeVideo = <YouTubeVideo> result.snippet;
-  let thumbs = video.thumbnails;
-  return {
-    title: video.title,
-    artist: video.videoOwnerChannelTitle || video.channelTitle,
-    link: `https://www.youtube.com/watch?v=${id}`,
-    cover: (thumbs.high || thumbs.medium || thumbs.default).url
-  };
+  let result = await searchYouTubeV2(id);
+  return formatSearch(result);
 }
 
 async function Spotify(track: SpotifyTrack) {
   // Fetch Videos
-  let videos = await searchYouTube(`${track.name} - ${track.artists[0].name} - Lyrics`);
-  if(!videos || (videos instanceof Array && videos.length < 1)) {
-    Logger.warn('[ST] Could not get Spotify Track!');
-    return;
-  }
+  let result = await searchYouTubeV2(`${track.name} - ${track.artists[0].name} - Lyrics`);
+  return formatSearch(result);
+}
 
-  // Get Single Video
-  let video: YouTubeSearchResult = (videos instanceof Array) ? videos.shift()! : videos;
-
-  // Pass items into Queue
-  let link = ((typeof video.id === 'object') ? video.id.videoId! : video.contentDetails?.videoId);
-  if(!link) {
-    Logger.warn('[ST] Link could not be processed!');
-    return;
-  }
-
-  return {
-    title: track.name,
-    artist: track.artists[0].name,
-    link: `https://www.youtube.com/watch?v=${link}`,
-    cover: track.album.images[0].url
-  };
+async function formatSearch(item: YTSRItem | null) {
+    if (!item) {
+      Logger.warn('[YT] Error while fetching YouTube Video!');
+      return;
+    };
+  
+    if(item.type === 'video') {
+      return {
+        title: item.title,
+        artist: item.author!.name,
+        link: item.url,
+        cover: item.bestThumbnail!.url
+      };
+    } else {
+      return {
+        title: item.firstVideo?.title!,
+        artist: `Playlist by ${item.owner}`,
+        link: item.url,
+        cover: item.firstVideo?.bestThumbnail.url!
+      }
+    }
 }

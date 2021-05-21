@@ -4,6 +4,7 @@ import { BirthdayModule } from './birthday.module';
 import { ChangelogModule } from './changelog.module';
 import { ClearModule } from './clear.module';
 import { ComplimentModule } from './compliment.module';
+import { ConfigBrowserModule } from './confbrowse.module';
 import { DadModule } from './dad.module';
 import { DeeJayModule } from './deejay.module';
 import { DefineModule } from './define.module';
@@ -58,5 +59,6 @@ export const modules: { [key: string]: Module } = {
   tutorial: new TutorialModule(),
   whois: new WhoIsModule(),
   changelog: new ChangelogModule(),
-  deejay: new DeeJayModule()
+  deejay: new DeeJayModule(),
+  confbrowse: new ConfigBrowserModule()
 };

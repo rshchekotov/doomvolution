@@ -1,5 +1,6 @@
 import { GuildConfig } from '@/interfaces/guild-config.interface';
 import { Module } from '@/interfaces/module.interface';
+import { Logger } from '@/services/logger.service';
 import { getMessage, send } from '@/util/discord.util';
 import { choose } from '@/util/random.util';
 
@@ -84,9 +85,13 @@ export class ComplimentModule extends Module {
     } else if (
       triggers.negative.some((n) => data.content.toLowerCase().includes(n))
     ) {
-      await send(data.channel_id, choose(responses.alright)!);
-      await msg.react('🤗');
-      await msg.react('💕');
+      try {
+        await send(data.channel_id, choose(responses.alright)!);
+        await msg.react('🤗');
+        await msg.react('💕');
+      } catch {
+        Logger.warn('Message doesn\'t exist!');
+      }
     }
   };
 }

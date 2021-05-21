@@ -56,3 +56,59 @@ export interface YouTubeThumbnail {
   width: number;
   height: number;
 }
+
+export interface YTSRObject {
+  originalQuery: string;
+  correctedQuery: string;
+  results: number;
+  activeFilters: {
+    name: string;
+    active: boolean;
+    url: any;
+    description: string;
+  }[];
+  refinements: any[];
+  items: YTSRItem[];
+  continuation: any;
+}
+
+export interface YTSRItem {
+  type: 'video' | 'playlist';
+  title: string;
+  id: string | undefined; // For Videos
+  playlistID: string | undefined; // For Playlists
+  url: string;
+  firstVideo: {
+    id: string;
+    shortURL: string;
+    url: string;
+    title: string;
+    length: string;
+    bestThumbnail: YouTubeThumbnail;
+    thumbnails: YouTubeThumbnail[];
+  } | undefined; // For Playlists
+  bestThumbnail: YouTubeThumbnail | undefined;
+  thumbnails: YouTubeThumbnail[] | undefined;
+  isUpcoming: boolean | undefined;
+  upcoming: any | undefined;
+  isLive: boolean | undefined;
+  badges: any[] | undefined;
+  author: YouTubeCreator | undefined; // For Videos
+  owner: YouTubeCreator | undefined; // For Playlists
+  description: any | undefined;
+  views: number | undefined;
+  duration: string | undefined;
+  uploadedAt: string | undefined;
+  publishedAt: any | undefined; // Playlists
+  length: number | undefined;
+}
+
+export interface YouTubeCreator {
+  name: string;
+  channelID: string;
+  url: string;
+  bestAvatar: YouTubeThumbnail | undefined;
+  avatars: YouTubeThumbnail[] | undefined;
+  ownerBadges: string[];
+  verified: boolean;
+}

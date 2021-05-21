@@ -29,7 +29,6 @@ export class PrefixModule extends Module {
   };
 
   run = async (event: string, data: any, config: GuildConfig) => {
-    Logger.debug("Runnin'");
     let handler = <GuildEventHandler>guilds.get(config.gid);
     if (data.content === config.prefix) {
       send(

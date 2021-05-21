@@ -13,7 +13,7 @@ export abstract class Module {
   private: string[] = [];
 
   cmd = async (data: any, re: RegExp, config: GuildConfig) => {
-    if (data.webhook_id) return null;
+    if (data.webhook_id || !data.author) return null;
     if ((await getUser(data.author.id)).bot) return null;
 
     let regex = re.exec(data.content.substr(config.prefix.length));

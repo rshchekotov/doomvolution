@@ -31,7 +31,7 @@ export class MorphModule extends Module {
 
   cache: { [user: string]: WebhookData | undefined } = {};
 
-  re: RegExp = /morph (.+|<@!\d+>)/;
+  re: RegExp = /^morph (.+|<@!\d+>)/;
 
   verify = async (event: string, data: any, config: GuildConfig) => {
     return true;
