@@ -126,6 +126,7 @@ export class DeeJayModule extends Module {
       if (!sub) return; // If no sub-command
 
       if (play.includes(sub[1])) {
+        let qstate = this.queue.length === 0;
         let query = media.exec(match[2]);
         if(!query) return;
 
@@ -193,7 +194,9 @@ export class DeeJayModule extends Module {
         }
 
         // Launch Voice Connection
-        if(this.queue.length > 0) {
+        // if the only song added
+        // is the current one.
+        if(qstate) {
           await this.init(message);
         }
       } else if(dc.includes(sub[1])) {
