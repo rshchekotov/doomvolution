@@ -26,11 +26,24 @@ function getFromPath(object: any, path: string[]) {
 }
 
 function rm(cso: ConfigStoreObject) {
-    let parent = cd(cso, -1);
-    if(parent !== cso) {
-        parent[cso.path[cso.path.length-1]] = undefined;
-    } // Is Root - Do Nothing.
-    return parent;
+    let old = Object.assign({}, cso);
+    let prev: any, cur: any;
+    let path = [...old.path]; // data>react>02>smile>0
+
+    if(path.length < 1) return cso;
+    
+    let child = path.splice(path.length-1,1)[0]; // 0
+    prev = getFromPath(old.config, path); // data>react>02>smile
+    delete prev[child]; // DEL smile>0
+
+    while(path.length > 0) {
+        let child = path.splice(path.length-1,1)[0]; // smile
+        cur = getFromPath(old.config, path); // data>react>02
+        cur[child] = prev; // 02 = smile
+        prev  = cur; // Set Back
+    }
+
+    return { config: prev, path: [], current: prev, page: 0 };
 }
 
 function cd(cso: ConfigStoreObject, i: number) {
@@ -38,10 +51,12 @@ function cd(cso: ConfigStoreObject, i: number) {
     if(i === -1) {
         if(cso.path.length > 0) {
             cso.path = cso.path.slice(0,-1);
+            cso.page = 0;
         }
     } else if(i < arr.length) {
         cso.path.push(arr[i]);
-        cso.current = cso.current[arr[i]];
+        //cso.current = cso.current[arr[i]];
+        cso.page = 0;
     } else {
         Logger.warn(`Index ${i} is greater than Key!`);
         return cso;
@@ -54,6 +69,7 @@ function formatConfig (obj: any, page: number) {
     let embed = new MessageEmbed()
         .setTitle(`Inspect DB`)
         .setColor('#000000')
+        .setFooter(`Page: ${page+1}/${Math.ceil(Object.keys(obj).length/5)}`)
         .setTimestamp();
     
     if(typeof obj === 'object') {
@@ -121,18 +137,26 @@ export class ConfigBrowserModule extends Module {
 
             if(this.cache[msg.id]) {
                 let cso = this.cache[msg.id];
+                let pages = Object.keys(cso.current).length;
 
-                if(eid === '▶️') cso.page++;
-                if(eid === '◀️') cso.page--;
-                if(eid === '⬆️') cso = cd(cso, -1);
-                if(number.includes(eid)) {
-                    cso = cd(cso, number.indexOf(eid));
+                if(eid === '▶️')
+                    cso.page = (cso.page + 1) % pages;
+                if(eid === '◀️') 
+                    cso.page = (cso.page + pages - 1) % pages;
+                if(eid === '⬆️') {
+                    cso = cd(cso, -1);
                 }
-                if(eid === '💚') {
-                    //Saving Mechanics
+                if(number.includes(eid)) {
+                    cso = cd(cso, cso.page*5 + number.indexOf(eid));
+                }
+                if(eid === '🟩') {
+                    let conf = (<GuildEventHandler> guilds.get(msg.guild!.id));
+                    conf.config = cso.config;
+                    await conf.pushConfig();
                     await msg.delete();
-                } else if(eid === '❤️') {
-                    await msg.delete();
+                    return;
+                } else if(eid === '🟥') {
+                    cso = rm(cso);
                 }
 
                 try {
@@ -163,8 +187,8 @@ export class ConfigBrowserModule extends Module {
                     await confmsg.react(number[i]);
                 }
                 await confmsg.react('▶️');
-                await confmsg.react('💚');
-                await confmsg.react('❤️');
+                await confmsg.react('🟩');
+                await confmsg.react('🟥');
             } catch {
                 Logger.warn('Message probably deleted!');
             }

@@ -71,11 +71,10 @@ export class ChangelogModule extends Module {
         guild.config.data.version = current;
         guild.pushConfig();
         config = guild.config;
+        if(!config.data.channel || !config.data.update) return;
+        if(config.data.update === 'true' || config.data.update === true)
+          await send(config.data.channel, formatChangelog(await getChangelogs()));
       }
-
-      if(!config.data.channel || !config.data.update) return;
-      if(config.data.update === 'true' || config.data.update === true)
-        await send(config.data.channel, formatChangelog(await getChangelogs()));
     } else {
       let resp: string | MessageEmbed | undefined = undefined;
       let match = (await this.cmd(data, this.re, config))!;

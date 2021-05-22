@@ -21,6 +21,7 @@ const queue = ['queue', 'q'];
 const np = ['now', 'n', 'np'];
 const skip = ['s', 'skip'];
 const clear = ['clear','cl'];
+const rm = ['rm', 'remove'];
 
 const media =
   /(\w+) https:\/\/(open\.spotify\.com|(?:w{3}\.)?youtube\.com|youtu\.be)\/(track\/\w+|playlist(?:\/\w+|\?list=[\w\-]+)|watch\?v=\w+(?:&list=[\w\-]+)?|[\w\-]+$)/;
@@ -86,7 +87,7 @@ export class DeeJayModule extends Module {
 
     this.dispatcher.on('finish', () => {
       this.queue.shift(); // Remove Played Item
-      if(this.queue.length > 1)
+      if(this.queue.length >= 1)
         return this.play(connection);
       channel.leave();
     }).on('error', e => {
@@ -125,7 +126,7 @@ export class DeeJayModule extends Module {
         return;
       }
 
-      let sub = /^(\w+) ?.*/.exec(match[2]);
+      let sub = /^(\w+) ?(.*)/.exec(match[2]);
       if (!sub) return; // If no sub-command
 
       if (play.includes(sub[1])) {
@@ -214,7 +215,9 @@ export class DeeJayModule extends Module {
             Logger.warn('Something went wrong during Voice Disconnect!');
           }
         }
+        message.channel.send(`*Disconnected*`);
       } else if(queue.includes(sub[1])) {
+        if(this.queue.length === 0) return;
         let q = this.queue.slice(0,10).map((e,i) => `${i}) ${e.title} - ${e.artist}`).join('\n');
         await message.channel.send(q);
       } else if(np.includes(sub[1])) {
@@ -232,11 +235,22 @@ export class DeeJayModule extends Module {
         embed.setURL(this.queue[0].link);
         await message.channel.send(embed);    
       } else if(skip.includes(sub[1])) {
-        this.queue.shift();
+        let track = this.queue.shift();
+        if(!track) {
+          message.channel.send(`Queue already empty!`);
+          return;
+        }
+        message.channel.send(`Popped ${track?.title} of the queue!`);
         if(this.queue.length > 0)
           this.init(message);
       } else if(clear.includes(sub[1])) {
+        message.channel.send(`Successfully Cleared ${this.queue.length} items!`);
         this.queue = [];
+      } else if(rm.includes(sub[1])) {
+        let track = Number(sub[2]);
+        if(Number.isNaN(track) || track >= this.queue.length) return;
+        this.queue = this.queue.filter((e,i) => i !== track);
+        message.channel.send(`Successfully Removed Track ${track}!`);
       }
     }
   };
