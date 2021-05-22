@@ -44,13 +44,13 @@ async function congratulate(config: GuildConfig, id: string) {
     .setFooter(
       `For ${user.nickname || user.user.username} | Brought to you by everyone!`
     );
-  send(config.data.channel, embed);
+  send(config.data.public, embed);
 }
 
 export class BirthdayModule extends Module {
   public name: string = 'birthday';
   types: string[] = ['BOT_READY', 'MESSAGE_CREATE'];
-  requires: string[] = ['channel'];
+  requires: string[] = ['public'];
   man: string[] = [
     '***__Birthday Module__***\n' +
       `The ${this.name} module allows the server family ` +

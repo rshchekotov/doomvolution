@@ -12,6 +12,7 @@ import { searchYouTubeV2 } from '@/util/youtube.util';
 import { YTSRItem } from '@/interfaces/youtube.interface';
 import { Message, MessageEmbed, StreamDispatcher, VoiceConnection } from 'discord.js';
 import * as ytdl from 'ytdl-core';
+import { Readable } from 'stream';
 import { Logger } from '@/services/logger.service';
 
 const dj = ['dj', 'deejay'];
@@ -22,17 +23,20 @@ const np = ['now', 'n', 'np'];
 const skip = ['s', 'skip'];
 const clear = ['clear','cl'];
 const rm = ['rm', 'remove'];
+const shuffle = ['shuffle'];
 
 const media =
   /(\w+) https:\/\/(open\.spotify\.com|(?:w{3}\.)?youtube\.com|youtu\.be)\/(track\/\w+|playlist(?:\/\w+|\?list=[\w\-]+)|watch\?v=\w+(?:&list=[\w\-]+)?|[\w\-]+$)/;
 
 /*
-  Test Data:
-
-  play https://open.spotify.com/track/6YUTL4dYpB9xZO5qExPf05?si=d50d97c3d17c49bf
-  play https://open.spotify.com/playlist/6PXdsh1VLGoq7Tf8H64ICa?si=1ab63813e8184d57
-  play https://www.youtube.com/watch?v=SbelQW2JaDQ
-  play https://www.youtube.com/watch?v=RgKAFK5djSk&list=PL_UQIFzJwtppLzhVvwicH4IG5o5QL-T1e
+  TODO:
+  => Swap Tracks
+  => Track Duration
+  => Queue Duration
+  => Queue Embed Formatting
+  => SkipTo Subcommand
+  => Seek Subcommand
+  => Create/Load Playlist
 */
 
 export class DeeJayModule extends Module {
@@ -89,7 +93,7 @@ export class DeeJayModule extends Module {
       this.queue.shift(); // Remove Played Item
       if(this.queue.length >= 1)
         return this.play(connection);
-      channel.leave();
+      this.track = null;
     }).on('error', e => {
       msg.reply('Error. Something went South!');
       Logger.error(e);
@@ -97,15 +101,15 @@ export class DeeJayModule extends Module {
     });
   }
 
+  track: Readable | null = null;
   play = (connection: VoiceConnection) => {
     if(this.dispatcher) this.dispatcher.destroy();
     let link = this.queue[0]!.link;
-
-    let track = ytdl(link, {
+    this.track = ytdl(link, {
       quality: "highestaudio",
       highWaterMark: 1024 * 1024 * 10
     });
-    return connection.play(track);
+    return connection.play(this.track);
   }
 
   verify = async (event: string, data: any, config: GuildConfig) => {
@@ -200,6 +204,7 @@ export class DeeJayModule extends Module {
         // Launch Voice Connection
         // if the only song added
         // is the current one.
+        await message.channel.send('Added ' + this.queue.length + ' song(s) to the queue!');
         if(qstate) {
           await this.init(message);
         }
@@ -217,9 +222,20 @@ export class DeeJayModule extends Module {
         }
         message.channel.send(`*Disconnected*`);
       } else if(queue.includes(sub[1])) {
-        if(this.queue.length === 0) return;
+        let embed = new MessageEmbed()
+          .setTitle(`Nothing's playing on the Server!`)
+          .setColor(`#990000`)
+          .setTimestamp();
+        if(this.queue.length < 1) {
+          await message.channel.send(embed);
+          return;
+        }
+
         let q = this.queue.slice(0,10).map((e,i) => `${i}) ${e.title} - ${e.artist}`).join('\n');
-        await message.channel.send(q);
+        embed.setTitle('Queue');
+        embed.setDescription(q);
+
+        await message.channel.send(embed);
       } else if(np.includes(sub[1])) {
         let embed = new MessageEmbed()
           .setTitle(`Nothing's playing on the Server!`)
@@ -235,22 +251,49 @@ export class DeeJayModule extends Module {
         embed.setURL(this.queue[0].link);
         await message.channel.send(embed);    
       } else if(skip.includes(sub[1])) {
-        let track = this.queue.shift();
+        let times = 1;
+
+        if(sub[2]) {
+          let tmp = Number(sub[2]);
+          if(!Number.isNaN(tmp)) times = tmp;
+        }
+
+        let track;
+        for(let i = 0; i < times; i++) {
+          track = this.queue.shift();
+        }
+
         if(!track) {
           message.channel.send(`Queue already empty!`);
           return;
+        } else {
+          message.channel.send(`Popped ${times === 1 ? track.title : `${times} items`} off the queue!`);
         }
-        message.channel.send(`Popped ${track?.title} of the queue!`);
+
         if(this.queue.length > 0)
           this.init(message);
+
       } else if(clear.includes(sub[1])) {
         message.channel.send(`Successfully Cleared ${this.queue.length} items!`);
-        this.queue = [];
+        this.queue = this.queue[0] ? [this.queue[0]] : [];
       } else if(rm.includes(sub[1])) {
         let track = Number(sub[2]);
         if(Number.isNaN(track) || track >= this.queue.length) return;
         this.queue = this.queue.filter((e,i) => i !== track);
         message.channel.send(`Successfully Removed Track ${track}!`);
+      } else if(shuffle.includes(sub[1])) {
+        if(this.queue.length === 0) {
+          await message.channel.send('Queue\'s empty!');
+          return;
+        }
+        let playing = this.queue.shift()!;
+        for (let i = this.queue.length - 1; i > 0; i--) {
+          const j = Math.floor(Math.random() * (i + 1));
+          let tmp = this.queue[j];
+          this.queue[j] = this.queue[i];
+          this.queue[i] = tmp;
+        }
+        this.queue.unshift(playing);
       }
     }
   };

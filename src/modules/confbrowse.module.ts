@@ -178,8 +178,10 @@ export class ConfigBrowserModule extends Module {
                     }, { max: 1 });
                     
                     let polled = collection.first();
-                    if(polled && polled.content === 'YES')
+                    if(polled && polled.content === 'YES') {
+                        await msg.channel.send(`Succesfully deleted ${cso.path.slice(-1)[0]}!`);
                         cso = rm(cso);
+                    }
                     else await msg.channel.send('Action was cancelled successfully!');
                 }
 
