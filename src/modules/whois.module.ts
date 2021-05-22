@@ -35,9 +35,9 @@ export class WhoIsModule extends Module {
     if (aliases.includes(match![1])) {
       let initial = await getMessage(data.channel_id, data.id);
       if (!initial) return;
-      
+
       let mentioned = initial.mentions.members;
-      if(!mentioned) return;
+      if (!mentioned) return;
 
       let user = mentioned.first();
       if (!user) return;

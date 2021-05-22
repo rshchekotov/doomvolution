@@ -4,6 +4,7 @@
   "description": "Universal Discord Bot",
   "main": "app.js",
   "scripts": {
+    "start:prod": "ts-node -r tsconfig-paths/register src/app.ts",
     "start:dev": "ts-node-dev -r tsconfig-paths/register --no-notify src/app.ts",
     "start:db": "docker-compose up -d",
     "stop:db": "docker-compose stop",

@@ -58,7 +58,7 @@ export class BirthdayModule extends Module {
       'send 2 congratulations at 9AM and 6PM Bot Time in order ' +
       'to cover most time zones in the case of an international ' +
       'server.\n' +
-      `*Current Bot Time: ${new Date().toLocaleString()}*\n`,
+      `*Bot Startup Time: ${new Date().toLocaleString()}*\n`,
     '_**Submit Birthday**_\n' +
       'You can submit your birthday in the format: `YYYY-MM-DD`. ' +
       'If you would like to use only the date without the year, ' +

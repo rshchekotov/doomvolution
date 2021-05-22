@@ -139,14 +139,12 @@ export class QuoteModule extends Module {
 
       // Fetch Message
       let msg = await getMessage(data.channel_id, data.message_id);
-      if (!msg || !msg.embeds || msg.embeds.length < 1)
-        return; // Skip if no Embed
+      if (!msg || !msg.embeds || msg.embeds.length < 1) return; // Skip if no Embed
 
       // Get Embed
       let embed = msg.embeds[0];
 
-      if(!embed.footer || embed.footer.text)
-        return; // If there's no Footer
+      if (!embed.footer || embed.footer.text) return; // If there's no Footer
 
       let match = /q-([a-f\d]{6}).*/.exec(embed.footer!.text || '');
       if (embed.footer!.text && match) {

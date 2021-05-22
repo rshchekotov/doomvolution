@@ -15,15 +15,19 @@ export interface YouTubeSearchList {
 export interface YouTubeSearchResult {
   kind: 'youtube#searchResult' | 'youtube#playlistItem';
   etag: string;
-  id: {
-    kind: 'youtube#video';
-    videoId?: string;
-  } | string;
+  id:
+    | {
+        kind: 'youtube#video';
+        videoId?: string;
+      }
+    | string;
   snippet: YouTubeVideo;
-  contentDetails: {
-    videoId: string;
-    videoPublishedAt: string;
-  } | undefined;
+  contentDetails:
+    | {
+        videoId: string;
+        videoPublishedAt: string;
+      }
+    | undefined;
 }
 
 // Video Object
@@ -40,10 +44,12 @@ export interface YouTubeVideo {
   channelTitle: string;
   playlistId: string | undefined;
   position: number | undefined;
-  resourceId: {
-    kind: 'youtube#video';
-    videoId: string;
-  } | undefined;
+  resourceId:
+    | {
+        kind: 'youtube#video';
+        videoId: string;
+      }
+    | undefined;
   videoOwnerChannelTitle: string | undefined;
   videoOwnerChannelId: string | undefined;
   liveBroadcastContent: string | undefined;
@@ -78,15 +84,17 @@ export interface YTSRItem {
   id: string | undefined; // For Videos
   playlistID: string | undefined; // For Playlists
   url: string;
-  firstVideo: {
-    id: string;
-    shortURL: string;
-    url: string;
-    title: string;
-    length: string;
-    bestThumbnail: YouTubeThumbnail;
-    thumbnails: YouTubeThumbnail[];
-  } | undefined; // For Playlists
+  firstVideo:
+    | {
+        id: string;
+        shortURL: string;
+        url: string;
+        title: string;
+        length: string;
+        bestThumbnail: YouTubeThumbnail;
+        thumbnails: YouTubeThumbnail[];
+      }
+    | undefined; // For Playlists
   bestThumbnail: YouTubeThumbnail | undefined;
   thumbnails: YouTubeThumbnail[] | undefined;
   isUpcoming: boolean | undefined;

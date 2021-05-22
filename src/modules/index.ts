@@ -60,5 +60,5 @@ export const modules: { [key: string]: Module } = {
   whois: new WhoIsModule(),
   changelog: new ChangelogModule(),
   deejay: new DeeJayModule(),
-  confbrowse: new ConfigBrowserModule()
+  confbrowse: new ConfigBrowserModule(),
 };

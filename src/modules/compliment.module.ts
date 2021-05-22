@@ -37,7 +37,7 @@ const triggers = {
     'cheesed',
     'annoy',
     'fuck',
-    'retard'
+    'retard',
   ],
 };
 
@@ -90,7 +90,7 @@ export class ComplimentModule extends Module {
         await msg.react('🤗');
         await msg.react('💕');
       } catch {
-        Logger.warn('Message doesn\'t exist!');
+        Logger.warn("Message doesn't exist!");
       }
     }
   };
