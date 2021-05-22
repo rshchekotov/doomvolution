@@ -4,7 +4,7 @@ import { GuildConfig } from '@/interfaces/guild-config.interface';
 import { Module } from '@/interfaces/module.interface';
 import { Logger } from '@/services/logger.service';
 import { getMessage, getReaction, getUser, send } from '@/util/discord.util';
-import { MessageEmbed } from 'discord.js';
+import { Message, MessageEmbed } from 'discord.js';
 
 const number = ['1️⃣', '2️⃣', '3️⃣', '4️⃣', '5️⃣'];
 
@@ -137,7 +137,7 @@ export class ConfigBrowserModule extends Module {
 
             if(this.cache[msg.id]) {
                 let cso = this.cache[msg.id];
-                let pages = Object.keys(cso.current).length;
+                let pages = Object.keys(cso.current).length/5;
 
                 if(eid === '▶️')
                     cso.page = (cso.page + 1) % pages;
@@ -150,13 +150,37 @@ export class ConfigBrowserModule extends Module {
                     cso = cd(cso, cso.page*5 + number.indexOf(eid));
                 }
                 if(eid === '🟩') {
-                    let conf = (<GuildEventHandler> guilds.get(msg.guild!.id));
-                    conf.config = cso.config;
-                    await conf.pushConfig();
+                    await msg.channel.send('Are you sure you want to save the current config?\nType `YES` to confirm.');
+                
+                    let collection = await msg.channel.awaitMessages((m: Message) => {
+                        return botDevs.includes(m.author.id) && m.channel.id === msg?.channel.id;
+                    }, { max: 1 });
+                    
+                    let polled = collection.first();
+                    if(polled && polled.content === 'YES') {
+                        let conf = (<GuildEventHandler> guilds.get(msg.guild!.id));
+                        conf.config = cso.config;
+                        await conf.pushConfig();
+                        await msg.channel.send('Saved Guild Config successfully!');
+                    } else {
+                        await msg.channel.send('Exited DB Browser successfully!');
+                    }
                     await msg.delete();
                     return;
+
                 } else if(eid === '🟥') {
-                    cso = rm(cso);
+                    await msg.channel.send('Are you sure you want to permanently delete `' + 
+                        cso.path.slice(-1)[0] +
+                        '`?\nType `YES` to confirm.');
+                    
+                    let collection = await msg.channel.awaitMessages((m: Message) => {
+                        return botDevs.includes(m.author.id) && m.channel.id === msg?.channel.id;
+                    }, { max: 1 });
+                    
+                    let polled = collection.first();
+                    if(polled && polled.content === 'YES')
+                        cso = rm(cso);
+                    else await msg.channel.send('Action was cancelled successfully!');
                 }
 
                 try {
@@ -172,7 +196,12 @@ export class ConfigBrowserModule extends Module {
             let match = (await this.cmd(data, this.re, config))!;
             let configuration = (<GuildEventHandler> guilds.get(match[1]!)).config;
 
-            let confmsg = await send(data.channel_id, formatConfig(configuration, 0));
+            let embed = formatConfig(configuration, 0);
+            let browser = embed.fields;
+            embed.setImage('https://i.ytimg.com/vi/pm4wzdYhOAo/maxresdefault.jpg');
+            embed.fields = []; // Empty fields during loading.
+
+            let confmsg = await send(data.channel_id, embed);
             this.cache[confmsg.id] = { 
                 config: configuration, 
                 path: new Array<string>(), 
@@ -189,6 +218,10 @@ export class ConfigBrowserModule extends Module {
                 await confmsg.react('▶️');
                 await confmsg.react('🟩');
                 await confmsg.react('🟥');
+                
+                embed.addFields(browser);
+                embed.image = null;
+                await confmsg.edit(embed);
             } catch {
                 Logger.warn('Message probably deleted!');
             }
