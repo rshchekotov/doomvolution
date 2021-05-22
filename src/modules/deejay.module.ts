@@ -19,6 +19,8 @@ const play = ['play', 'p'];
 const dc = ['dc','disconnect','kill'];
 const queue = ['queue', 'q'];
 const np = ['now', 'n', 'np'];
+const skip = ['s', 'skip'];
+const clear = ['clear','cl'];
 
 const media =
   /(\w+) https:\/\/(open\.spotify\.com|(?:w{3}\.)?youtube\.com|youtu\.be)\/(track\/\w+|playlist(?:\/\w+|\?list=[\w\-]+)|watch\?v=\w+(?:&list=[\w\-]+)?|[\w\-]+$)/;
@@ -98,10 +100,11 @@ export class DeeJayModule extends Module {
     if(this.dispatcher) this.dispatcher.destroy();
     let link = this.queue[0]!.link;
 
-    return connection.play(ytdl(link, {
+    let track = ytdl(link, {
       quality: "highestaudio",
       highWaterMark: 1024 * 1024 * 10
-    }));
+    });
+    return connection.play(track);
   }
 
   verify = async (event: string, data: any, config: GuildConfig) => {
@@ -212,8 +215,7 @@ export class DeeJayModule extends Module {
           }
         }
       } else if(queue.includes(sub[1])) {
-        let q = this.queue.map(e => `${e.title} - ${e.artist}`).join('\n');
-
+        let q = this.queue.slice(0,10).map((e,i) => `${i}) ${e.title} - ${e.artist}`).join('\n');
         await message.channel.send(q);
       } else if(np.includes(sub[1])) {
         let embed = new MessageEmbed()
@@ -229,6 +231,12 @@ export class DeeJayModule extends Module {
         embed.setImage(this.queue[0].cover || 'https://4.bp.blogspot.com/-FUoPaGKn0FA/Tlys73-VTnI/AAAAAAAABwg/_oVT_8_n7L4/s1600/house_electro_music_wallpaper_5.jpg');
         embed.setURL(this.queue[0].link);
         await message.channel.send(embed);    
+      } else if(skip.includes(sub[1])) {
+        this.queue.shift();
+        if(this.queue.length > 0)
+          this.init(message);
+      } else if(clear.includes(sub[1])) {
+        this.queue = [];
       }
     }
   };
