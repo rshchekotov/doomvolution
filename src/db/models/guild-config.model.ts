@@ -18,7 +18,13 @@ class GuildConfig {
   public nick: string = DefaultConfig.nick;
 
   @prop()
-  public modules: string[] = DefaultConfig.modules;
+  public packages: string[] = DefaultConfig.packages;
+  
+  @prop()
+  public repositories: string[] = DefaultConfig.repositories;
+
+  @prop()
+  public environments: {[channel: string]: string[]} = DefaultConfig.environments;
 
   @prop()
   public data: any = DefaultConfig.data;

@@ -15,6 +15,7 @@ export async function initDB() {
     authSource: 'admin',
     useNewUrlParser: true,
     useUnifiedTopology: true,
+    useFindAndModify: false,
   });
 
   Logger.info(`Created Connection: ${mongo.connection.db.databaseName}`);

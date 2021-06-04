@@ -1,0 +1,27 @@
+{
+    "welcomes": [
+        ":flag_de: Hallo! :flag_de:",
+        ":flag_nl: Hallo! :flag_nl:",
+        ":flag_ru: Привет :flag_ru:",
+        ":flag_jp: こんにちは :flag_jp:",
+        ":flag_jp: もしもし :flag_jp:",
+        ":flag_ph: Kamusta :flag_ph:",
+        ":flag_fr: Salut :flag_fr:",
+        ":flag_pl: cześć :flag_pl:",
+        ":flag_us: Hey! :flag_us:",
+        ":flag_in: नमस्ते :flag_in:",
+        ":flag_au: ollǝH :flag_au:",
+        ":flag_es: Hola :flag_es:",
+        ":duck: Booo! :duck:",
+        ":sunglasses: WHAT'S UP MY DIGGITY DIGGITY DAWG :sunglasses:",
+        ":sandwich: sammich sammich! :sandwich:"
+    ],
+    "images": [
+        "https://media1.tenor.com/images/056c584d9335fcabf080ca43e583e3c4/tenor.gif",
+        "https://media1.tenor.com/images/79f33c2f524cbfed4ef6896b39e67663/tenor.gif",
+        "https://media1.tenor.com/images/72c9b849aa10b222371ebb99a6b1896a/tenor.gif",
+        "https://media1.tenor.com/images/f82fdfe817cfb8dacb5bd5c7dadb632d/tenor.gif",
+        "https://media1.tenor.com/images/af87df7587d7c41691d464fdccdfba34/tenor.gif",
+        "https://media1.tenor.com/images/52f60132f102e315a01464cc6eabfeec/tenor.gif"
+    ]
+}

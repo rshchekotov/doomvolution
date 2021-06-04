@@ -32,5 +32,5 @@ export async function getComic(num: number): Promise<XKCDComic | null> {
 }
 
 export async function getRandomComic() {
-  return await getComic(Math.floor(Math.random() * 2463));
+  return await getComic(Math.floor(Math.random() * 2463))!;
 }

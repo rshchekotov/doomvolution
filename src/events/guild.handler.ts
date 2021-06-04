@@ -1,11 +1,16 @@
 import { client, guilds } from '@/app';
 import { GuildConfigModel } from '@/db/models/guild-config.model';
+import { PagedEmbed, PagedEmbeds } from '@/discord/paged.embed';
 import {
   DefaultConfig,
   GuildConfig,
 } from '@/interfaces/guild-config.interface';
-import { modules } from '@/modules';
+import { PackageInput } from '@/interfaces/package.interface';
+import { Package } from '@/repository/package';
+import { repositories } from '@/repository/repository';
 import { Logger } from '@/services/logger.service';
+import { getReaction } from '@/util/discord.util';
+import { byBot, findPackage, makePackageInput } from '@/util/package.util';
 import { Guild } from 'discord.js';
 
 const registered: string[] = [];
@@ -36,7 +41,9 @@ export class GuildEventHandler {
         gid: doc.gid,
         prefix: doc.prefix,
         nick: doc.nick,
-        modules: doc.modules,
+        packages: doc.packages,
+        repositories: doc.repositories,
+        environments: doc.environments,
         data: doc.data,
       };
     }
@@ -52,18 +59,30 @@ export class GuildEventHandler {
   }
 
   async handleEvent(name: string, data: any) {
-    for (let mod of this.config.modules) {
-      // If such module exists in global store!
-      if (modules[mod]) {
-        // If module matches sent event!
-        if (modules[mod].types.includes(name)) {
-          // If module passes verification:
-          if (await modules[mod].verify(name, data, this.config)) {
-            await modules[mod].run(name, data, this.config);
-          }
-        }
+    // Check Paginations
+    if(['MESSAGE_REACTION_ADD'].includes(name)) { 
+      if(await byBot('reaction', data)) return;
+      let embed = <PagedEmbed | undefined> PagedEmbeds.get(data.message_id)
+      if(embed) {
+        let eid = data.emoji.id || data.emoji.name;
+        let uid = data.user_id;
+        await embed.emote(eid, uid);
+        return;
       }
     }
+
+    // Parse Input Data
+    let input = makePackageInput(name, data, this.config);
+
+    // Pass Onto Packages!
+    await findPackage(this.config, input, async (pkg: Package, dat: PackageInput) => {
+      let passed = await pkg.verify(dat);
+      if(passed) {
+        await pkg.exec(dat);
+        return true;
+      }
+      return false;
+    });
   }
 
   async pushConfig() {

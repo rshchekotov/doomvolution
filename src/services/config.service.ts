@@ -11,7 +11,7 @@ export const options: ClientOptions = {
   presence: {
     status: 'online',
     activity: {
-      name: 'Vibes',
+      name: `${new Date().toString().split(' ')[0]} Vibes`,
       type: 'LISTENING',
     },
   },

@@ -1,0 +1,51 @@
+{
+    "index": [
+        "Sad Emotions",
+        "Happy Emotions"
+    ],
+    "emotions": [
+        [
+            "depress", "frustrat", "annoy", "fuck this", 
+            "fuck you", "give up"
+        ],
+        [
+            "achiev", "success", "luck", "fuck yeah", 
+            "hell yeah", "awesome", "love you", "love it"
+        ]
+    ],
+    "responses": [
+        [[""]],
+        [
+            ["‡title=It's okay, don't worry, everything will be great!‡"],
+            ["‡title=I'm here to listen if you need me!‡"],
+            ["‡title=No wise words or advice here. Just me. Thinking of you. Hoping for you. Wishing you better days ahead.‡"],
+            ["‡title=I don’t know what depression feels like, and wish with all my heart that you didn’t have to know, either.‡"],
+            ["‡title=I’m so sorry you’re experiencing a setback. I don’t know what to say, except that care about you, and I’m here for you.‡"],
+            ["‡title=We’ve got friends for our happiest days and saddest moments. I hope you know I’m your friend now just as much as ever.‡"],
+            ["‡title=If you ever need to talk, or just cry, I’m your gal.‡"],
+            ["‡title=Little Help‡I’m not sure what’s most helpful right now, but I figure a card with a cute kitten (https://www.zastavki.com/pictures/1440x900/2010/Animals_Cats_Cute_kitten_024945_.jpg) on it couldn’t hurt, right? ☺ Thinking of you…"],
+            ["‡title=Sorry things are crappy. If you need somebody to binge-watch a whole season of something with you, I’m there.‡"],
+            ["‡title=At a time like this, don’t even bother with a dish. Just grab a spoon and start shoveling ice cream straight from the carton.‡"],
+            ["‡title=You can get through this. Take it from me. I’m very wise and stuff.‡"],
+            ["‡title=I believe in you! And unicorns. But mostly you!‡"],
+            ["‡title=You're not Trash!‡‡attach=https://cdn.discordapp.com/attachments/773267146305437696/850142635377033236/not_trash.mp4‡"]
+        ], 
+        [
+            ["‡title=I am Really Happy for You My Dear‡See, good things happen to good people. I'm happy for you my dear."],
+            ["‡title=I'm really happy for you.‡"],
+            ["‡title=There is enough sun for everybody.‡I cheer for people. I was raised to believe there's enough sun for everybody."],
+            ["‡title=I always wish for your happiness‡You should always know I wish for your happiness even without me."],
+            ["‡title=I am your well wisher.‡Never do the Envy, Jealousy or insecure stuff. Be the hustler, the well wisher, the go better!"],
+            ["‡title=Be happy for others, because life is not a competition.‡Call me crazy, but I love to see people happy and succeeding. Life is a journey, not a competition!"],
+            [["‡title=I am happy for your achievements.‡Success may come and go away, but your achievements will stay. I AM REALLY HAPPY FOR YOU!"]],
+            ["‡title=Those who are not happy for you are not even happy for themselves.‡Don't worry about the people who aren't happy for you. They probably aren't happy for themselves, either.\nI am happy for you."],
+            ["‡title=I am happy and proud of your success‡Success comes only to those who believe in themselves and are prepared to win. I AM REALLY HAPPY FOR YOUR SUCCESS!"],
+            ["‡title=We should live a positive life and always be happy for others as these happy moments are priceless.‡Luck is an amazing thing, but not many people have it, so today I want to wish you lots of it.\nI AM REALLY HAPPY FOR YOU!"],
+            ["‡title=My wishes are always with you!‡I am really happy for you. God bless you and fill your life with more happiness and success!"],
+            ["‡title=I am here to celebrate your success with you.‡The worst part of success is trying to find someone who is happy for you.\nBut always remember that I am happy for you."],
+            ["‡title=I wish you will always shine like this.‡Luck is yours and wishes are mine, let your bright future always shine.\nI AM REALLY HAPPY FOR YOU!"],
+            ["‡title=I really mean this.‡I have no pearl to gift you, I have no diamond to give you, I only have beautiful words to say:\nI AM REALLY HAPPY FOR YOU!"]
+        ], 
+        [["‡title=I know exactly what you feel. Don't worry, chill and get to a 💯, because we wanna see you shine as always!‡"]]
+    ]
+}

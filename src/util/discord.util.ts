@@ -7,13 +7,15 @@ import {
   Guild,
   GuildMember,
   Message,
+  MessageAdditions,
   MessageEmbed,
   TextChannel,
   User,
 } from 'discord.js';
 
-export async function send(cid: string, content: string | MessageEmbed) {
+export async function send(cid: string, content: string | MessageEmbed, options?: MessageAdditions) {
   let channel = <TextChannel>await getChannel(cid);
+  if(options) return await channel.send(content, options);
   return await channel.send(content);
 }
 
@@ -22,10 +24,11 @@ export async function getMessage(
   mid: string
 ): Promise<Message | undefined> {
   try {
-    let chan = <TextChannel>await getChannel(cid);
+    let chan = <TextChannel> await getChannel(cid);
     if (chan.messages.cache.has(mid)) return chan.messages.cache.get(mid)!;
     return await chan.messages.fetch(mid);
-  } catch {
+  } catch(e) {
+    Logger.error(`\n${e.stack}\n${e.name}\n${e.message}`);
     Logger.warn(`Message '${mid}' Not Found!`);
     return undefined;
   }
@@ -85,14 +88,7 @@ export async function sendAsHook(
 // Own Helpers
 
 export function hasARole(user: string, config: GuildConfig, roles: string[]) {
-  if (config.data.users) {
-    if (!config.data.users[user]) return ['member'];
-    else {
-      return roles.some((role) => config.data.users[user].includes(role))
-        ? []
-        : roles;
-    }
-  } else return [];
+  // TODO
 }
 
 export function getAvatar(user: User) {
@@ -107,7 +103,7 @@ export function getAvatar(user: User) {
 
 export async function hookify(user: GuildMember | User): Promise<WebhookData> {
   return {
-    name: user instanceof User ? user.username : user.user.username,
+    name: user instanceof User ? user.username : (user.nickname || user.user.username),
     options: {
       avatar: getAvatar(user instanceof User ? user : user.user),
       reason: 'Why not?',
@@ -140,3 +136,14 @@ export async function checkReactions(
   }
   return true;
 }
+
+
+export const markdown = [
+  { obj: '', w: 32 },
+  { obj: '*', w: 16 },
+  { obj: '**', w: 8 },
+  { obj: '***', w: 4 },
+  { obj: '__', w: 4 },
+  { obj: '~~', w: 1 },
+  { obj: '||', w: 1 },
+];

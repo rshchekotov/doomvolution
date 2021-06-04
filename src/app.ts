@@ -32,7 +32,14 @@ async function start() {
   await configure();
   client = new Client(options);
 
-  client.on('raw', (data) => {
+  client.on('rateLimit', (info) => {
+    Logger.warn(`Rate Limited!\n` + 
+      `\t\tTimeout: ${info.timeout}\n` + 
+      `\t\tRate Limit: ${info.limit}\n` +
+      `\t\tRoute: ${info.route}`);
+  });
+
+  client.on('raw', async (data) => {
     if (!data.t) return;
 
     if (events.void.includes(data.t)) {
@@ -48,8 +55,8 @@ async function start() {
       events.reaction.includes(data.t)
     ) {
       let gid = data.d.guild_id;
-      let guildHandler: GuildEventHandler = guilds.get(gid)!;
-      guildHandler.handleEvent(data.t, data.d);
+      let guildHandler: GuildEventHandler | undefined = guilds.get(gid);
+      if(guildHandler) await guildHandler.handleEvent(data.t, data.d);
     } else {
       Logger.debug(data.t);
     }
@@ -61,7 +68,8 @@ async function start() {
   try {
     if (!client.user) return;
     await client.user.setAvatar(
-      'https://c.wallhere.com/photos/c3/d3/simple_background_bandage_Darling_in_the_FranXX_feet_horns_Zero_Two_Darling_in_the_FranXX-1332201.jpg!d'
+      //'https://c.wallhere.com/photos/c3/d3/simple_background_bandage_Darling_in_the_FranXX_feet_horns_Zero_Two_Darling_in_the_FranXX-1332201.jpg!d'
+      'https://cdn.discordapp.com/app-icons/783261265035395123/5e9d1b49910a5dd862caace25e07587c.png?size=256'
     );
   } catch {
     Logger.warn('Profile Picture unchanged!');

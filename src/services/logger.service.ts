@@ -18,7 +18,7 @@ const logFormat = [
 ];
 
 class LoggerService {
-  async log(logType: LogType, message: unknown): Promise<void> {
+  log(logType: LogType, message: unknown): void {
     console.log(this.prefix(logType) + message + reset);
   }
 
