@@ -112,7 +112,7 @@ export async function growDuck(config: GuildConfig, owner: string) {
     if(duck.state >= 6) return; // Skip Grown-Ups
     let days = 2 - 3*Math.pow(Math.E,-Math.pow(duck.state-4.5,2))
         + 5 * Math.pow(Math.E,-Math.pow(duck.state-5,2)); 
-    addSchedule('duckieeee', owner, timer(days /* * 24 * 60*/ * 60), async () => {
+    addSchedule('duckieeee', owner, timer(days * 24 * 60 * 60), async () => {
         let sduck = getDuck(config, owner)!;
         sduck.state++;
         await saveDuck(config, sduck);

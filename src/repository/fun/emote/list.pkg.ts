@@ -36,6 +36,10 @@ export class ListPackage extends Package {
                 await send(input.data.channel_id, `No Emotes Found!`);
                 return true;
             } 
+
+            if(emotes.length > 160) {
+                emotes = emotes.slice(0,160);
+            }
             let pages: Array<Array<EmoteConfig>> = partition(emotes, 16);
             let images = pages.map(page => page.map(emote => emote.url));
             let captions = pages.map(page => page.map(emote => emote.name));
