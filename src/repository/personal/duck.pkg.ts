@@ -117,6 +117,7 @@ export async function growDuck(config: GuildConfig, owner: string) {
         + 5 * Math.pow(Math.E,-Math.pow(duck.state-5,2));
 
     duck.nextStageAt = new Date(Date.now() + days*24*60*60*1000);
+    await saveDuck(config, duck);
 
     addSchedule('duckieeee', owner, timer(days * 24 * 60 * 60), async () => {
         let sduck = getDuck(config, owner)!;
