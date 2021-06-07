@@ -42,6 +42,7 @@ export class HatchPackage extends Package {
             kind: 0,
             lastFed: new Date(),
             lastPlayed: new Date(),
+            nextStageAt: new Date(),
             consective: 0,
             value: 1
         };

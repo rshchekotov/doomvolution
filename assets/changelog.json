@@ -6,7 +6,7 @@
         "desc": [
             { "module": "hello", "desc": "Added more greetings ))" },
             { "module": "duckieee", "desc": "Added more Duck Pictures" },
-            { "module": "duckieee", "desc": "Variable Hatch Times" },
+            { "module": "duckieee", "desc": "Variable Hatch Times [Fixed]" },
             { "module": "duckieee", "desc": "You can lookup other peoples ducks now" },
             { "module": "spen", "desc": "/Spenny/ gets detected as well." }
         ]

@@ -5,6 +5,8 @@ export interface Duck {
     state: number;
     kind: number;
 
+    nextStageAt: Date;
+
     lastFed: Date;
     lastPlayed: Date;
     consective: number;
