@@ -5,7 +5,7 @@ import { Package } from "@/repository/package";
 import { send } from "@/util/discord.util";
 import { GuildHandler } from "@/util/package.util";
 import { Message } from "discord.js";
-import { getDuck, growDuck, saveDuck } from "../duck.pkg";
+import { getDuck, growDuck } from "../duck.pkg";
 
 export class HatchPackage extends Package {
     name: string = 'duck hatch';

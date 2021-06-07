@@ -110,7 +110,7 @@ export async function saveDuck(config: GuildConfig, duck: Duck) {
 export async function growDuck(config: GuildConfig, owner: string) {
     let duck: Duck = config.data.ducks[owner];
     if(duck.state >= 6) return; // Skip Grown-Ups
-    let days = 2 - 3*Math.pow(Math.E,-Math.pow(duck.state-4.5,2))
+    let days = (1+Math.random()*2) - 3*Math.pow(Math.E,-Math.pow(duck.state-4.5,2))
         + 5 * Math.pow(Math.E,-Math.pow(duck.state-5,2)); 
     addSchedule('duckieeee', owner, timer(days * 24 * 60 * 60), async () => {
         let sduck = getDuck(config, owner)!;
@@ -118,7 +118,7 @@ export async function growDuck(config: GuildConfig, owner: string) {
         await saveDuck(config, sduck);
         if(sduck.state >= 6) return;
 
-        let sdays = 2 - 3*Math.pow(Math.E,-Math.pow(sduck.state-4.5,2))
+        let sdays = (1+Math.random()*2) - 3*Math.pow(Math.E,-Math.pow(sduck.state-4.5,2))
             + 5 * Math.pow(Math.E,-Math.pow(sduck.state-5,2));
 
         addSchedule('duckieeee', owner, timer(sdays * 24 * 60 * 60), getScheduledFunction('duckieeee', owner));

@@ -1,7 +1,7 @@
 import { PackageInput } from "@/interfaces/package.interface";
 import { Package } from "@/repository/package";
 import { Logger } from "@/services/logger.service";
-import { getUser, send } from "@/util/discord.util";
+import { getMessage, getUser, send } from "@/util/discord.util";
 import { MessageAttachment, MessageEmbed } from "discord.js";
 import { getDuck } from "../duck.pkg";
 
@@ -15,7 +15,13 @@ export class InfoPackage extends Package {
     help = async () => [];
     exec = async (input: PackageInput) => {
         Logger.debug('DUCK INFO DETECTED');
-        let duck = getDuck(input.config, input.data.author.id);
+        let author = input.data.author.id;
+        
+        let msg = await getMessage(input.data.channel_id, input.data.id);
+        if(msg && msg.mentions.users.array().length > 0)
+            author = msg.mentions.users.first()!.id; 
+
+        let duck = getDuck(input.config, author);
         if(!duck) return true;
 
         let age = ((new Date().getTime()) - duck.birthday.getTime()) / (1000 * 60 * 60 * 24);

@@ -21,7 +21,7 @@ export class SpenPackage extends Package {
     events = ['MESSAGE_CREATE'];
     triggers = [
         /(?:^| )me+p(?: |$)/i,
-        /(?:^| )spe+n+o*(?:r+ex+)?(?: |$)/i
+        /(?:^| )spe+n+(?:o*|y*)(?:r+ex+)?(?: |$)/i
     ];
 
     help = async () => [
