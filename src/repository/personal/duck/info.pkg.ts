@@ -36,7 +36,7 @@ export class InfoPackage extends Package {
             .addFields([
                 { 'name': 'Age (Days):', 'value': (Math.round(age*100)/100) },
                 { 'name': 'Birthday', 'value': duck.birthday.toLocaleDateString() },
-                { 'name': 'Time To Grow', 'value': duck.state < 6 ? (Math.round(growth * 100)/100 + ' Days') : 'Grown Up'},
+                { 'name': 'Time To Grow', 'value': Math.round(100*(duck.nextStageAt.getTime() - Date.now()) / (1000 * 60 * 60 * 24))/100 + ' days' },
                 { 'name': 'Owner', 'value': user.username },
                 { 'name': 'State', 'value': (duck.state < 5) ? 'Egg' : (duck.state === 5) ? 'Duckling' : 'Duck' }
             ])
