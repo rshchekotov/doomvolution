@@ -14,7 +14,6 @@ export class InfoPackage extends Package {
 
     help = async () => [];
     exec = async (input: PackageInput) => {
-        Logger.debug('DUCK INFO DETECTED');
         let author = input.data.author.id;
         
         let msg = await getMessage(input.data.channel_id, input.data.id);

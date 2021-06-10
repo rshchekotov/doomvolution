@@ -122,16 +122,20 @@ export async function growDuck(config: GuildConfig, owner: string) {
     addSchedule('duckieeee', owner, timer(days * 24 * 60 * 60), async () => {
         let sduck = getDuck(config, owner)!;
         sduck.state++;
+
         await saveDuck(config, sduck);
+        let nd = (() => { return Date.now(); })();
+        
+        Logger.debug(new Date(nd).toISOString());
         if(sduck.state >= 6) {
-            sduck.nextStageAt = new Date(Date.now() + 12*365*24*60*60*1000);
+            sduck.nextStageAt = new Date(nd + 12*365*24*60*60*1000);
             return;
         } // Skip Grown-Ups
 
         let sdays = (1+Math.random()*2) - 3*Math.pow(Math.E,-Math.pow(sduck.state-4.5,2))
             + 5 * Math.pow(Math.E,-Math.pow(sduck.state-5,2));
         
-        sduck.nextStageAt = new Date(Date.now() + sdays*24*60*60*1000);
+        sduck.nextStageAt = new Date(nd + sdays*24*60*60*1000);
 
         addSchedule('duckieeee', owner, timer(sdays * 24 * 60 * 60), getScheduledFunction('duckieeee', owner));
     });
