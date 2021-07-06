@@ -36,11 +36,15 @@ export class FeedPackage extends Package {
         } else duck.consective = 1;
 
         duck.value += duck.consective;
+
+        let duckGoddess = input.data.author.id === '761742403685842954';
+        if(duckGoddess) duck.consective *= 2;
         duck.lastFed = new Date();
 
         await saveDuck(input.config, duck);
 
-        let embed = new MessageEmbed().setTitle('Duckie\'s peacefully chewing on Grass!');
+        let title = duckGoddess ? `After utmost care of the Duck Deity ${duck.name} is well-fed and satisfied.` : 'Duckie\'s peacefully chewing on Grass!';
+        let embed = new MessageEmbed().setTitle(title);
         if(duck.state === 5) embed.setImage('https://images.fineartamerica.com/images-medium-large-5/yellow-baby-duck-eating-grass-lynn-langmade.jpg');
         if(duck.state === 6) embed.setImage('https://il1.picdn.net/shutterstock/videos/7285966/thumb/1.jpg');
 

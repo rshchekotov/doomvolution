@@ -18,11 +18,12 @@ export class BalancePackage extends Package {
         if(!duck) return true;
 
         const attachment = new MessageAttachment(`./assets/images/duck/duckcoin.png`, `duckcoin.png`);
+        let val = input.data.author.id === '756757056941326397' ? 'Infinite' : duck.value;
         let embed = new MessageEmbed()
-            .setTitle(`Thanks to your awesome duckie, you got ${duck.value} Quack Coins`)
+            .setTitle(`Thanks to your awesome duckie, you got ${val} Quack Coins`)
             .attachFiles([attachment])
             .setImage('attachment://duckcoin.png');
-        let mesg = await send(input.data.channel_id, embed);
+        await send(input.data.channel_id, embed);
         return true;
     };
 
